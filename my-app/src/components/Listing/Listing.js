@@ -36,7 +36,7 @@ const Listing = ({
   useEffect(() => {
     getListing(match.params.slug);
     var socket_connect = function(room) {
-      return io('localhost:3000', {
+      return io('http://127.0.0.1:5000/', {
         query: 'r_var=' + room
       });
     };
@@ -44,6 +44,7 @@ const Listing = ({
     var socket = socket_connect(room);
 
     socket.emit('join');
+
     setSocketData({ socket });
 
     socket.on('bid', function() {
