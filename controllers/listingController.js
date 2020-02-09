@@ -3,9 +3,7 @@ const Listing = require('../models/listingModel');
 exports.createListing = async (req, res, next) => {
   try {
     const listingBody = { ...req.body, createdBy: req.user.id };
-    console.log(listingBody);
     const newListing = await Listing.create(listingBody);
-
     res.status(201).json({ listing: newListing });
   } catch (err) {
     console.log(err.message);
@@ -74,7 +72,7 @@ exports.getAllListings = async (req, res, next) => {
     if (req.query.page) {
       const numListings = await Listing.countDocuments();
       if (skip >= numListings) {
-        return next(new AppError('This page does not exist'));
+        return res.status(500).send('Server Error');
       }
     }
 
@@ -93,7 +91,6 @@ exports.endExpiredListings = async (req, res, next) => {
     let listings = req.listings;
     for (const listing of listings) {
       if (listing.endDate.getTime() < Date.now()) {
-        console.log('x');
         listing.active = false;
         if (listing.bids.length > 0) {
           var winningBid = listing.bids.reduce((max, listing) =>
@@ -102,7 +99,6 @@ exports.endExpiredListings = async (req, res, next) => {
         } else {
           var winningBid = null;
         }
-
         let winner;
         winningBid === null ? (winner = null) : (winner = winningBid.user);
         await Listing.update(
@@ -111,9 +107,7 @@ exports.endExpiredListings = async (req, res, next) => {
         );
       }
     }
-
     listings = listings.filter(listing => listing.active);
-
     res.status(200).json({
       status: 'success',
       listings: listings.length,
@@ -174,9 +168,7 @@ exports.updateListing = async (req, res, next) => {
 exports.makeBid = async (req, res, next) => {
   try {
     const listing = await Listing.findById(req.params.id).populate('createdBy');
-    console.log(listing);
     const maxBid = Math.max(...listing.bids.map(o => o.bid), 0);
-    console.log(maxBid);
     const bid = {
       user: req.user.id,
       bid: req.body.bid

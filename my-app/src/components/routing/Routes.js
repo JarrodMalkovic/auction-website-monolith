@@ -18,6 +18,7 @@ import YourListingsPage from '../Dashboard/YourListingsPage';
 import BiddingHistoryPage from '../Dashboard/BiddingHistoryPage';
 import YourReviewsPage from '../Dashboard/YourReviewsPage';
 import EditReviewPage from '../Reviews/EditReviewPage';
+import Notification from '../Layout/Notification';
 
 const Routes = ({ loadUser, dispatch }) => {
   useEffect(() => {
@@ -30,8 +31,12 @@ const Routes = ({ loadUser, dispatch }) => {
         <Route exact path='/register' component={Register} />
         <Route exact path='/listings' component={Listings} />
         <Route exact path='/listings/:slug' component={Listing} />
-        <Route exact path='/create' component={CreateListingPage} />
-        <Route exact path='/listings/:slug/edit' component={EditListingPage} />
+        <PrivateRoute exact path='/create' component={CreateListingPage} />
+        <PrivateRoute
+          exact
+          path='/listings/:slug/edit'
+          component={EditListingPage}
+        />
         <Route exact path='/profile/:id' component={ProfilePage} />
         <Route exact path='/profile/:id/review' component={ReviewForm} />
         <PrivateRoute exact path='/dashboard' component={Dashboard} />

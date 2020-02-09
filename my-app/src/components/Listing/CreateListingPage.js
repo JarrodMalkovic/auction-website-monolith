@@ -2,18 +2,11 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createListing } from '../../actions/listing';
-import { Redirect } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ImageUpload from '../Forms/ImageUpload';
 
-const CreateListingPage = ({
-  createListing,
-  history,
-  auth: { user, loading },
-  match,
-  isAuthenticated
-}) => {
+const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -53,9 +46,7 @@ const CreateListingPage = ({
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
-    console.log(description, title);
     e.preventDefault();
-    console.log(image);
     createListing(
       title,
       description,
@@ -71,17 +62,8 @@ const CreateListingPage = ({
 
   const setParentImage = childImage => {
     setFormData({ ...formData, image: childImage });
-    console.log(childImage);
-    console.log(image);
     image = childImage;
-    console.log(image);
   };
-
-  if (!loading && user != null) {
-    if (user._id == null) {
-      return <Redirect to='/dashboard' />;
-    }
-  }
 
   return (
     <Fragment>
@@ -180,8 +162,4 @@ const CreateListingPage = ({
 
 CreateListingPage.propTypes = {};
 
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-export default connect(mapStateToProps, { createListing })(CreateListingPage);
+export default connect(null, { createListing })(CreateListingPage);

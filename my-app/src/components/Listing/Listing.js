@@ -81,19 +81,6 @@ const Listing = ({
     socket.emit('bid');
   };
 
-  // const joinRoom = () => {
-  //   var socket_connect = function(room) {
-  //     return io('localhost:3000', {
-  //       query: 'r_var=' + room
-  //     });
-  //   };
-
-  //   var room = match.params.slug;
-  //   var socket = socket_connect(room);
-
-  //   socket.emit('chat message', 'hello room #' + room);
-  // };
-
   return loading || data === null ? (
     <div>Loading..</div>
   ) : (

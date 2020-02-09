@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import alert from './alert';
 import auth from './auth';
 import user from './user';
 import reviews from './reviews';
 import review from './review';
 import listings from './listings';
 import listing from './listing';
+import notification from './notification';
 
 export default combineReducers({
   auth,
@@ -13,5 +13,6 @@ export default combineReducers({
   listing,
   user,
   reviews,
-  review
+  review,
+  notification
 });

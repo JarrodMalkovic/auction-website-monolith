@@ -2,8 +2,10 @@ import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Routes from './components/routing/Routes';
 import Navbar from './components/Layout/Navbar';
+import Notification from './components/Layout/Notification';
 import './App.css';
-import { loadUser } from './actions/auth';
+
+// import { ToastProvider } from 'react-toast-notifications';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -23,6 +25,7 @@ const App = () => {
           </Switch>
         </Fragment>
       </Router>
+      <Notification />
     </Provider>
   );
 };
