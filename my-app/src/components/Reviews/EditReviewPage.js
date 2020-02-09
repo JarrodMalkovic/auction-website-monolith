@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { getReview, clearReview, editReview } from '../../actions/review';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const EditReviewPage = ({
   getReview,
@@ -62,6 +63,9 @@ const EditReviewPage = ({
     <div>Loading..</div>
   ) : (
     <div>
+      <Helmet>
+        <title>Edit review | Auction</title>
+      </Helmet>
       <form className='form' onSubmit={e => onSubmit(e)}>
         <h1>Title of your review</h1>
         <div className='form-group'>

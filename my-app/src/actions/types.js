@@ -22,3 +22,5 @@ export const LOGOUT = 'LOGOUT';
 export const DELETE_BID = 'DELETE_BID';
 export const MARK_REVIEW_HELPFUL = 'MARK_REVIEW_HELPFUL';
 export const ADD_NOTIFICATION = 'ADD_NOTIFICATION';
+export const USER_ERROR = 'USER_ERROR';
+export const LISTING_ERROR = 'LISTING_ERROR';

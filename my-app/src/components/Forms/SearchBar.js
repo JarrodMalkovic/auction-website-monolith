@@ -2,7 +2,6 @@ import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { getListings, clearListings } from '../../actions/listing';
-const queryString = require('query-string');
 
 const SearchBar = ({ getListings, clearListings }) => {
   const [formData, setFormData] = useState({
@@ -16,10 +15,10 @@ const SearchBar = ({ getListings, clearListings }) => {
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async e => {
+  const onSubmit = e => {
     e.preventDefault();
     clearListings();
-    var search = '';
+    let search = '';
     if (query) {
       search = '?search=' + query.split(' ').join('+');
     }

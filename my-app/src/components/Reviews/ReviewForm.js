@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { createReview } from '../../actions/review';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 const ReviewForm = ({ createReview, match, history }) => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,9 @@ const ReviewForm = ({ createReview, match, history }) => {
   };
   return (
     <div>
+      <Helmet>
+        <title>Create review | Auction</title>
+      </Helmet>
       <form className='form' onSubmit={e => onSubmit(e)}>
         <h1>Title of your review</h1>
         <div className='form-group'>

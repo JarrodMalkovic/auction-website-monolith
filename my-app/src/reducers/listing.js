@@ -1,8 +1,14 @@
-import { GET_LISTING, CLEAR_LISTING, DELETE_BID } from '../actions/types';
+import {
+  GET_LISTING,
+  CLEAR_LISTING,
+  DELETE_BID,
+  LISTING_ERROR
+} from '../actions/types';
 
 const initialState = {
   data: null,
-  loading: true
+  loading: true,
+  errors: null
 };
 
 export default function(state = initialState, action) {
@@ -16,7 +22,15 @@ export default function(state = initialState, action) {
       return {
         ...state,
         data: null,
-        loading: true
+        loading: true,
+        errors: null
+      };
+    case LISTING_ERROR:
+      return {
+        ...state,
+        data: [],
+        loading: false,
+        errors: 'ERROR'
       };
     default:
       return state;

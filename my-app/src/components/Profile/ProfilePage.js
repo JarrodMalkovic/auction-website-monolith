@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getUserById } from '../../actions/user';
-import { getReviewsWrittenForUser } from '../../actions/review';
+import { getUserById, clearUser } from '../../actions/user';
+import { getReviewsWrittenForUser, clearReviews } from '../../actions/review';
 import { connect } from 'react-redux';
-import { getActiveListingsByUserId } from '../../actions/listing';
+import {
+  getActiveListingsByUserId,
+  clearListings
+} from '../../actions/listing';
 import ListItem from '../Listings/ListItem';
 import ReactModal from 'react-modal';
 import ReviewItem from '../Reviews/ReviewItem';
 import { Link } from 'react-router-dom';
 import ReportForm from '../Forms/ReportForm';
+import { Fragment } from 'react';
+import { Helmet } from 'react-helmet';
 
 const ProfilePage = ({
   match,
@@ -16,6 +21,9 @@ const ProfilePage = ({
   getActiveListingsByUserId,
   getReviewsWrittenForUser,
   user,
+  clearUser,
+  clearReviews,
+  clearListings,
   auth,
   listings,
   reviews
@@ -38,19 +46,36 @@ const ProfilePage = ({
     getActiveListingsByUserId(match.params.id);
     getUserById(match.params.id);
     getReviewsWrittenForUser(match.params.id);
-  }, [getActiveListingsByUserId, getUserById]);
+    return () => {
+      clearUser();
+      clearListings();
+      clearReviews();
+    };
+  }, [
+    getActiveListingsByUserId,
+    getUserById,
+    clearUser,
+    clearListings,
+    clearReviews
+  ]);
 
-  return user.loading ||
+  return (user.loading ||
     user.data === null ||
     auth.loading ||
     auth.user === null ||
     listings.loading ||
     listings.data === null ||
     reviews.data === null ||
-    reviews.loading ? (
+    reviews.loading) &&
+    !user.errors ? (
     <div>Loading..</div>
+  ) : user.errors ? (
+    <div>No user found</div>
   ) : (
-    <div>
+    <Fragment>
+      <Helmet>
+        <title>{user.data.name} | Auction</title>
+      </Helmet>
       <img src={user.data.avatar} alt='User profile picture' />
       <h2>{user.data.name}</h2>
       <button onClick={handleOpenModal}>
@@ -84,7 +109,7 @@ const ProfilePage = ({
               <ListItem key={listing._id} listing={listing} />
             ))}
       </div>
-    </div>
+    </Fragment>
   );
 };
 
@@ -100,5 +125,8 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   getUserById,
   getReviewsWrittenForUser,
-  getActiveListingsByUserId
+  getActiveListingsByUserId,
+  clearReviews,
+  clearUser,
+  clearListings
 })(ProfilePage);

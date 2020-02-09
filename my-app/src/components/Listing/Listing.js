@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { getListing, makeBid } from '../../actions/listing';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactModal from 'react-modal';
@@ -14,7 +15,7 @@ const Listing = ({
   makeBid,
   match,
   clearListing,
-  listing: { data, loading },
+  listing: { data, loading, errors },
   auth
 }) => {
   const [modalData, setModalData] = useState({
@@ -81,10 +82,15 @@ const Listing = ({
     socket.emit('bid');
   };
 
-  return loading || data === null ? (
+  return (loading || data === null) && !errors ? (
     <div>Loading..</div>
+  ) : errors ? (
+    <div>No listing found</div>
   ) : (
     <div>
+      <Helmet>
+        <title>{data.title} | Auction</title>
+      </Helmet>
       <h1>{data.title}</h1>
       {!data.active && <h3>Listing has ended</h3>}
       <Link to={`/profile/${data.createdBy._id}`}>

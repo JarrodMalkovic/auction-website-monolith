@@ -25,6 +25,11 @@ exports.getListingBySlug = async (req, res, next) => {
     const listing = await Listing.findOne({ slug: req.params.slug }).populate(
       'createdBy'
     );
+
+    if (!listing) {
+      res.status(404).json({ msg: 'No listing found' });
+    }
+
     res.status(200).json({ listing });
   } catch (err) {
     console.log(err.message);

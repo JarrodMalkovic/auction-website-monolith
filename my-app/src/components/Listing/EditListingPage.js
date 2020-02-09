@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { editListing, getListing, clearListing } from '../../actions/listing';
 import { Redirect } from 'react-router-dom';
 import ImageUpload from '../Forms/ImageUpload';
+import { Helmet } from 'react-helmet';
 
 const EditListingPage = ({
   editListing,
@@ -93,6 +94,9 @@ const EditListingPage = ({
     <div>Loading..</div>
   ) : (
     <Fragment>
+      <Helmet>
+        <title>Edit listing | Auction</title>
+      </Helmet>
       <h1>Edit Listing</h1>
       <form className='form' onSubmit={e => onSubmit(e)}>
         <div className='form-group'>

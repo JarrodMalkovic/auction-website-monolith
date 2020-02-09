@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { register } from '../../actions/auth';
+import { Helmet } from 'react-helmet';
 
 const Register = ({ register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,9 @@ const Register = ({ register, isAuthenticated }) => {
 
   return (
     <Fragment>
+      <Helmet>
+        <title>Create an account | Auction</title>
+      </Helmet>
       <h1 className='large text-primary'>Register</h1>
       <p className='lead'>
         <i className='fas fa-user' /> Register an Account

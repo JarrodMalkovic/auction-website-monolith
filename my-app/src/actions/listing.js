@@ -7,7 +7,8 @@ import {
   GET_USERS_ACTIVE_LISTINGS,
   GET_USERS_INACTIVE_LISTINGS,
   DELETE_LISTING,
-  DELETE_BID
+  DELETE_BID,
+  LISTING_ERROR
 } from './types';
 import { addNotification } from './notification';
 
@@ -28,6 +29,7 @@ export const getListing = slug => async dispatch => {
     dispatch({ type: GET_LISTING, payload: res.data.listing });
   } catch (err) {
     console.log(`Error: ${err.response.data.msg}`);
+    dispatch({ type: LISTING_ERROR });
   }
 };
 

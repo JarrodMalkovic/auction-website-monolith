@@ -149,7 +149,9 @@ exports.getUserBidHistory = async (req, res, next) => {
 exports.getUserById = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
-    console.log('user:', user);
+    if (!user) {
+      res.status(404).json({ msg: 'No user found' });
+    }
     res.status(200).json(user);
   } catch (err) {
     console.log(err.message);

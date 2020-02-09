@@ -1,8 +1,9 @@
-import { GET_USER, CLEAR_USER } from '../actions/types';
+import { GET_USER, CLEAR_USER, USER_ERROR } from '../actions/types';
 
 const initialState = {
   data: null,
-  loading: true
+  loading: true,
+  errors: null
 };
 
 export default function(state = initialState, action) {
@@ -15,9 +16,17 @@ export default function(state = initialState, action) {
       return {
         ...state,
         data: null,
-        loading: false
+        errors: null,
+        loading: true
       };
     }
+    case USER_ERROR:
+      return {
+        ...state,
+        data: [],
+        loading: false,
+        errors: 'ERROR'
+      };
     default:
       return state;
   }

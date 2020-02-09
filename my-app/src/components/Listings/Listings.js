@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ListItem from './ListItem';
 import { clearListings } from '../../actions/listing';
 import PaginationButtons from '../Layout/PaginationButtons';
+import { Helmet } from 'react-helmet';
 const queryString = require('query-string');
 
 export const Listings = ({
@@ -26,6 +27,9 @@ export const Listings = ({
     <div>Loading..</div>
   ) : (
     <div>
+      <Helmet>
+        <title>Browsing listings | Auction</title>
+      </Helmet>
       <h1>Listings</h1>
       <h3>
         Found {numListings} results searching for{' '}

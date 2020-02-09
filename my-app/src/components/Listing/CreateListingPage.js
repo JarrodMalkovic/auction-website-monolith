@@ -5,6 +5,7 @@ import { createListing } from '../../actions/listing';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ImageUpload from '../Forms/ImageUpload';
+import { Helmet } from 'react-helmet';
 
 const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -67,6 +68,9 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
 
   return (
     <Fragment>
+      <Helmet>
+        <title>Create Listing | Auction</title>
+      </Helmet>
       <h1>Create Listing</h1>
       <form className='form' onSubmit={e => onSubmit(e)}>
         <div className='form-group'>

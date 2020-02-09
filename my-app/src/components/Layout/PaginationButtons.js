@@ -7,12 +7,11 @@ const queryString = require('query-string');
 
 const PaginationButtons = ({
   parsed,
-  query,
   numListings,
   getListings,
   clearListings
 }) => {
-  const page = parsed.page || 1;
+  // const page = parsed.page || 1;
   const limit = parsed.limit || 10;
   const lastPage = Math.ceil(numListings / limit);
   let history = useHistory();
@@ -22,18 +21,7 @@ const PaginationButtons = ({
     clearListings();
     parsed.page = num;
     parsed.limit = limit;
-    const stringified = '?' + queryString.stringify(parsed);
-    // search = '';
-    // console.log(parsed.page == undefined);
-    // console.log(stringified);
-    // if (parsed.page == undefined) {
-    //   stringified === '?'
-    //     ? (search = stringified + `limit=${limit}&page=${num}`)
-    //     : (search = stringified + `&limit=${limit}&page=${num}`);
-    // } else {
-    search = stringified;
-    // }
-
+    search = '?' + queryString.stringify(parsed);
     history.push(`/listings${search}`);
     getListings(search);
   };

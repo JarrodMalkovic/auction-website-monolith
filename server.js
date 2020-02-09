@@ -5,6 +5,8 @@ const cloudinary = require('cloudinary');
 const app = express();
 var server = require('http').Server(app);
 const io = require('socket.io')(server);
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 // Connect Database
 connectDB();
@@ -44,6 +46,12 @@ io.on('connection', function(socket) {
     io.to(room).emit('chat message', msg);
   });
 });
+
+//Data sanitization against NoSQL query injections
+app.use(mongoSanitize());
+
+//Data Sanitization against XSS
+app.use(xss());
 
 // Init Middleware
 app.use(express.json({ extended: false })); //allows us to get the data on req.body

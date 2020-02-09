@@ -18,7 +18,7 @@ import YourListingsPage from '../Dashboard/YourListingsPage';
 import BiddingHistoryPage from '../Dashboard/BiddingHistoryPage';
 import YourReviewsPage from '../Dashboard/YourReviewsPage';
 import EditReviewPage from '../Reviews/EditReviewPage';
-import Notification from '../Layout/Notification';
+import PageNotFound from '../Layout/PageNotFound';
 
 const Routes = ({ loadUser, dispatch }) => {
   useEffect(() => {
@@ -65,6 +65,7 @@ const Routes = ({ loadUser, dispatch }) => {
           path='/dashboard/bids'
           component={BiddingHistoryPage}
         />
+        <Route component={PageNotFound} />
       </Switch>
     </div>
   );
