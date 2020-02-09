@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { addNotification } from './notification';
 
 export const createReport = (id, reason, reportedRef) => async dispatch => {
   try {
@@ -13,9 +14,10 @@ export const createReport = (id, reason, reportedRef) => async dispatch => {
       reportedRef
     };
 
-    const res = await axios.post(`/api/report/${id}`, body, config);
+    await axios.post(`/api/report/${id}`, body, config);
+    dispatch(addNotification('Report Created Successfully!', 'success'));
   } catch (err) {
-    console.log('err');
-    console.log(err);
+    console.log(`Error: ${err.response.data.msg}`);
+    dispatch(addNotification(err.response.data.msg, 'error'));
   }
 };

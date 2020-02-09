@@ -91,7 +91,9 @@ const Listing = ({
         Listing created by {data.createdBy.name}
       </Link>
       <img src={data.image}></img>
-      <ReportForm type={'Listing'} id={data._id} />
+      {auth.isAuthenticated && auth.user._id != data.createdBy._id && (
+        <ReportForm type={'Listing'} id={data._id} />
+      )}
       {!auth.loading && auth.user._id == data.createdBy._id && (
         <Link to={`/listings/${data.slug}/edit`}>
           <h4>EDIT</h4>

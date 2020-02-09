@@ -16,6 +16,7 @@ const ProfilePage = ({
   getActiveListingsByUserId,
   getReviewsWrittenForUser,
   user,
+  auth,
   listings,
   reviews
 }) => {
@@ -41,6 +42,8 @@ const ProfilePage = ({
 
   return user.loading ||
     user.data === null ||
+    auth.loading ||
+    auth.user === null ||
     listings.loading ||
     listings.data === null ||
     reviews.data === null ||
@@ -48,13 +51,17 @@ const ProfilePage = ({
     <div>Loading..</div>
   ) : (
     <div>
-      <img src={user.data.avatar} alt='' />
+      <img src={user.data.avatar} alt='User profile picture' />
       <h2>{user.data.name}</h2>
-      <ReportForm type={'user'} id={user.data._id} />
       <button onClick={handleOpenModal}>
         View Reviews ({reviews.data.length})
       </button>
-      <Link to={`/profile/${user.data._id}/review`}>Write a Review</Link>
+      {auth.isAuthenticated && auth.user._id != user.data._id && (
+        <ReportForm type={'user'} id={user.data._id} />
+      )}
+      {auth.isAuthenticated && auth.user._id != user.data._id && (
+        <Link to={`/profile/${user.data._id}/review`}>Write a Review</Link>
+      )}
       <ReactModal
         isOpen={showModal}
         closeTimeoutMS={0}
@@ -63,15 +70,19 @@ const ProfilePage = ({
         onAfterOpen={handleOpenModal}
       >
         <h1>Reviews</h1>
-        {reviews.data.map(review => (
-          <ReviewItem key={review._id} review={review} />
-        ))}
+        {reviews.data.length === 0
+          ? 'This user has no reviews yet'
+          : reviews.data.map(review => (
+              <ReviewItem key={review._id} review={review} />
+            ))}
       </ReactModal>
       <div>
-        <h3>Browse {user.data.name.split(' ')[0]}'s listings</h3>
-        {listings.data.map(listing => (
-          <ListItem key={listing._id} listing={listing} />
-        ))}
+        <h3>Browse {user.data.name.split(' ')[0]}'s recent listings</h3>
+        {listings.data.length === 0
+          ? 'This user has no active listenings at the moment'
+          : listings.data.map(listing => (
+              <ListItem key={listing._id} listing={listing} />
+            ))}
       </div>
     </div>
   );
@@ -82,7 +93,8 @@ ProfilePage.propTypes = {};
 const mapStateToProps = state => ({
   user: state.user,
   listings: state.listings,
-  reviews: state.reviews
+  reviews: state.reviews,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, {

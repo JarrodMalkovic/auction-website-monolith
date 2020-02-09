@@ -16,8 +16,8 @@ exports.createReport = async (req, res, next) => {
 
     res.status(200).send(report);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.log(err.message);
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -27,6 +27,6 @@ exports.getReports = async (req, res, next) => {
     res.status(200).json({ reports });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Server Error' });
   }
 };

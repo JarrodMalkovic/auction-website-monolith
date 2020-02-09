@@ -51,8 +51,8 @@ exports.createUser = async (req, res, next) => {
       }
     );
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.log(err.message);
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -67,8 +67,8 @@ exports.getMyProfile = async (req, res, next) => {
 
     res.json(profile);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.log(err.message);
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -77,8 +77,8 @@ exports.deleteUser = async (req, res, next) => {
     await User.findOneAndRemove({ _id: req.user.id });
     res.json({ msg: 'User deleted' });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.log(err.message);
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -94,8 +94,8 @@ exports.getAllUsers = async (req, res, next) => {
       }
     });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.log(err.message);
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -112,7 +112,7 @@ exports.updateUser = async (req, res, next) => {
     res.status(200).json({ msg: 'Updated User' });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -123,7 +123,7 @@ exports.deleteUser = async (req, res, next) => {
     res.status(200).json({ msg: 'Deleted User' });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -142,7 +142,7 @@ exports.getUserBidHistory = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -152,7 +152,7 @@ exports.getUserById = async (req, res, next) => {
     console.log('user:', user);
     res.status(200).json(user);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.log(err.message);
+    res.status(500).json({ msg: 'Server Error' });
   }
 };

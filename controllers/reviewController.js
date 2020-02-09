@@ -74,7 +74,7 @@ exports.deleteReview = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -92,7 +92,7 @@ exports.updateReview = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -118,6 +118,6 @@ exports.markReviewAsHelpful = async (req, res, next) => {
     res.status(200).json({ review });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Server Error' });
   }
 };

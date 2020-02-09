@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { createReview } from '../../actions/review';
 import { connect } from 'react-redux';
 
-const ReviewForm = ({ createReview, match }) => {
+const ReviewForm = ({ createReview, match, history }) => {
   const [formData, setFormData] = useState({
     title: '',
     text: '',
@@ -17,8 +17,7 @@ const ReviewForm = ({ createReview, match }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    console.log(match.params.id, title, text, rating);
-    createReview(match.params.id, title, text, rating);
+    createReview(match.params.id, title, text, rating, history);
   };
   return (
     <div>

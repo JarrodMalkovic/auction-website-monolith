@@ -7,7 +7,7 @@ exports.createListing = async (req, res, next) => {
     res.status(201).json({ listing: newListing });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 exports.getListingById = async (req, res, next) => {
@@ -16,7 +16,7 @@ exports.getListingById = async (req, res, next) => {
     res.status(200).json({ listing });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -28,7 +28,7 @@ exports.getListingBySlug = async (req, res, next) => {
     res.status(200).json({ listing });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -44,7 +44,6 @@ exports.getAllListings = async (req, res, next) => {
     // 2) Search by listing title (e.g 2004 Toyota Hyundi, Logitech G502, Sony Playstation 4)
     if (req.query.search) {
       let search = req.query.search.split('%20').join(' ');
-      console.log(search);
       const RegEx = new RegExp(search);
       query = query.find({ title: { $regex: RegEx, $options: 'si' } });
     }
@@ -140,7 +139,7 @@ exports.deleteListing = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -161,7 +160,7 @@ exports.updateListing = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -183,7 +182,7 @@ exports.makeBid = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -194,8 +193,6 @@ exports.deleteBid = async (req, res, next) => {
     );
 
     listing.bids = listing.bids.filter(bid => {
-      console.log(bid._id != req.params.bid_id);
-      console.log(bid.user.toString() != req.user.id);
       return bid._id != req.params.bid_id || bid.user.toString() != req.user.id;
     });
     const maxBid = Math.max(...listing.bids.map(o => o.bid), 0);
@@ -204,7 +201,7 @@ exports.deleteBid = async (req, res, next) => {
     return res.status(200).json(listing);
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -212,19 +209,17 @@ exports.endListing = async (req, res, next) => {
   try {
     let listing = await Listing.findById(req.params.id);
     if (listing.createdBy.toString() === req.user.id) {
-      console.log('true');
       listing.active = false;
     } else {
       return res
         .status(400)
         .json({ msg: "You cannot end a listing that isn't yours!" });
     }
-    console.log(listing);
     await listing.save();
     return res.status(200).json(listing);
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -244,7 +239,7 @@ exports.getActiveListingsByUser = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -264,7 +259,7 @@ exports.getInactiveListingsByUser = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -284,7 +279,7 @@ exports.getUsersActiveListings = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 exports.getUsersInactiveListings = async (req, res, next) => {
@@ -303,7 +298,7 @@ exports.getUsersInactiveListings = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 
@@ -323,7 +318,7 @@ exports.getUsersWonListings = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Internal Server Error, please try again' });
   }
 };
 

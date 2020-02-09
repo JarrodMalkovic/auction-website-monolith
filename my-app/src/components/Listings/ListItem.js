@@ -36,7 +36,9 @@ const ListItem = ({ listing, auth, deleteListing, setListingShipped }) => {
           <button onClick={onClick}>Delete</button>
         </Fragment>
       )}
-      <ReportForm type={'Listing'} id={listing._id} />
+      {auth.isAuthenticated && auth.user._id != listing.createdBy._id && (
+        <ReportForm type={'Listing'} id={listing._id} />
+      )}
       {!auth.loading &&
         !listing.active &&
         auth.user._id === listing.createdBy._id.toString() && (

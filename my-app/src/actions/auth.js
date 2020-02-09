@@ -8,9 +8,9 @@ import {
   LOGOUT
 } from './types';
 import { setAuthToken } from '../utils/setAuthToken';
+import { addNotification } from './notification';
 
 export const login = (email, password) => async dispatch => {
-  console.log('g322et here');
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -18,20 +18,19 @@ export const login = (email, password) => async dispatch => {
   };
 
   try {
-    console.log('get here');
     const res = await axios.post('/api/auth', { email, password }, config);
-    console.log(res);
     dispatch({ type: LOGIN_SUCCESS, payload: res.data });
     console.log('success');
     dispatch(loadUser());
+    dispatch(addNotification('Logged in Successfully', 'success'));
   } catch (err) {
-    console.log('fail');
+    console.log(`Error: ${err.response.data.msg}`);
+    dispatch(addNotification(err.response.data.msg, 'error'));
   }
 };
 
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {
-    console.log('local:', localStorage.token);
     setAuthToken(localStorage.token);
   }
 
@@ -39,13 +38,9 @@ export const loadUser = () => async dispatch => {
     const res = await axios.get('/api/auth');
 
     dispatch({ type: USER_LOADED, payload: res.data });
-    // dispatch({
-    //   type: USER_LOADED,
-    //   payload: res
-    // });
   } catch (err) {
-    console.log('Couldnt load user..');
     dispatch({ type: USER_LOADING_ERROR });
+    console.log(`Error: ${err.response.data.msg}`);
   }
 };
 
@@ -57,7 +52,6 @@ export const register = (name, email, password) => async dispatch => {
   };
 
   try {
-    console.log('get here');
     const res = await axios.post(
       '/api/users',
       { name, email, password },
@@ -65,13 +59,15 @@ export const register = (name, email, password) => async dispatch => {
     );
 
     dispatch({ type: REGISTER_SUCCESS, payload: res.data });
-    console.log(res);
     dispatch(loadUser());
   } catch (err) {
-    console.log(err.message);
+    console.log(`Error: ${err.response.data.msg}`);
+    dispatch(addNotification(err.response.data.msg, 'error'));
   }
 };
+
 export const logout = () => dispatch => {
   dispatch({ type: CLEAR_USER });
   dispatch({ type: LOGOUT });
+  dispatch(addNotification('Logged out Successfully', 'success'));
 };

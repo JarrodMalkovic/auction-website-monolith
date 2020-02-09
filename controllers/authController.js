@@ -21,8 +21,6 @@ exports.loginUser = async (req, res) => {
       return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
     }
 
-    console.log(user);
-    console.log(user._id);
     const payload = {
       user: {
         id: user._id
@@ -39,16 +37,15 @@ exports.loginUser = async (req, res) => {
       }
     );
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.log(err.message);
+    res.status(500).json({ msg: 'Server Error' });
   }
 };
 
-// Authenticate User
 exports.authenticate = async (req, res, next) => {
   // Get token from header
   const token = req.header('x-auth-token');
-  console.log(token);
+
   // Check if not token
   if (!token) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
@@ -61,7 +58,6 @@ exports.authenticate = async (req, res, next) => {
         res.status(401).json({ msg: 'Token is not valid' });
       } else {
         req.user = decoded.user;
-        console.log(decoded.user);
         next();
       }
     });
@@ -89,6 +85,6 @@ exports.getActiveListingsByUser = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Server Error' });
   }
 };

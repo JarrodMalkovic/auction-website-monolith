@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { GET_USER } from './types';
+import { addNotification } from './notification';
 
 export const getUserById = id => async dispatch => {
   const res = await axios.get(`/api/users/${id}`);
-  console.log(res);
   dispatch({ type: GET_USER, payload: res.data });
 };
 
@@ -34,9 +34,10 @@ export const updateUserProfile = (
   };
 
   try {
-    const res = await axios.patch('/api/users/me', body, config);
+    await axios.patch('/api/users/me', body, config);
+    dispatch(addNotification('Profile updated Successfully', 'success'));
   } catch (err) {
-    console.log('err');
-    console.log(err.message);
+    console.log(`Error: ${err.response.data.msg}`);
+    dispatch(addNotification(err.response.data.msg, 'error'));
   }
 };
