@@ -7,9 +7,10 @@ exports.createListing = async (req, res, next) => {
     res.status(201).json({ listing: newListing });
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ msg: 'Internal Server Error, please try again' });
+    res.status(400).json({ msg: err.message });
   }
 };
+
 exports.getListingById = async (req, res, next) => {
   try {
     const listing = await Listing.findById(req.params.id);

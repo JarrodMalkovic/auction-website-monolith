@@ -14,4 +14,13 @@ router.get('/', authController.authenticate, userController.getMyProfile);
 // @access   Public
 router.post('/', authController.loginUser);
 
+// @route    POST api/auth/update-password
+// @desc     Update user password
+// @access   Private
+router.patch(
+  '/update-password',
+  authController.authenticate,
+  authController.updatePassword
+);
+
 module.exports = router;

@@ -24,7 +24,12 @@ export const Listings = ({
   const parsed = queryString.parse(location.search);
 
   return loading || data === null ? (
-    <div>Loading..</div>
+    <div>
+      <Helmet>
+        <title>Loading.. | Auction</title>
+      </Helmet>
+      <p>Loading..</p>
+    </div>
   ) : (
     <div>
       <Helmet>

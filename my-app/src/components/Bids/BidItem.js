@@ -2,10 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { deleteBid } from '../../actions/listing';
+import io from 'socket.io-client';
 
-const BidItem = ({ bid, auth, deleteBid, listingId }) => {
-  const onClick = () => {
-    deleteBid(listingId, bid._id);
+const BidItem = ({ bid, auth, deleteBid, listingId, socket }) => {
+  const onClick = async e => {
+    await deleteBid(listingId, bid._id);
+    socket.emit('deleted bid');
+    console.log(socket);
   };
 
   return (

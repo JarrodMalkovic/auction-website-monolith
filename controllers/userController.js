@@ -52,7 +52,7 @@ exports.createUser = async (req, res, next) => {
     );
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ msg: 'Server Error' });
+    res.status(400).json({ msg: err.message });
   }
 };
 
@@ -110,17 +110,6 @@ exports.updateUser = async (req, res, next) => {
     await user.update(req.body);
 
     res.status(200).json({ msg: 'Updated User' });
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).json({ msg: 'Server Error' });
-  }
-};
-
-exports.deleteUser = async (req, res, next) => {
-  try {
-    await User.findByIdAndDelete(req.user.id);
-
-    res.status(200).json({ msg: 'Deleted User' });
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ msg: 'Server Error' });

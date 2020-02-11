@@ -20,7 +20,6 @@ export const login = (email, password) => async dispatch => {
   try {
     const res = await axios.post('/api/auth', { email, password }, config);
     dispatch({ type: LOGIN_SUCCESS, payload: res.data });
-    console.log('success');
     dispatch(loadUser());
     dispatch(addNotification('Logged in Successfully', 'success'));
   } catch (err) {
@@ -40,16 +39,25 @@ export const loadUser = () => async dispatch => {
     dispatch({ type: USER_LOADED, payload: res.data });
   } catch (err) {
     dispatch({ type: USER_LOADING_ERROR });
-    console.log(`Error: ${err.response.data.msg}`);
+    console.log(`Error: ${err.response.msg}`);
   }
 };
 
-export const register = (name, email, password) => async dispatch => {
+export const register = (
+  name,
+  email,
+  password,
+  passwordConfirm
+) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
     }
   };
+
+  if (password !== passwordConfirm) {
+    return dispatch(addNotification("Passwords don't match", 'error'));
+  }
 
   try {
     const res = await axios.post(
@@ -70,4 +78,32 @@ export const logout = () => dispatch => {
   dispatch({ type: CLEAR_USER });
   dispatch({ type: LOGOUT });
   dispatch(addNotification('Logged out Successfully', 'success'));
+};
+
+export const updatePassword = (
+  currentPassword,
+  newPassword,
+  newPasswordConfirm
+) => async dispatch => {
+  console.log(currentPassword, newPassword, newPasswordConfirm);
+  if (newPassword !== newPasswordConfirm) {
+    return dispatch(addNotification("New passwords don't match", 'error'));
+  }
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    await axios.patch(
+      '/api/auth/update-password',
+      { currentPassword, newPassword },
+      config
+    );
+    dispatch(addNotification('Password Successfully Updated', 'success'));
+  } catch (err) {
+    console.log(`Error: ${err.response.data.msg}`);
+    dispatch(addNotification(err.response.data.msg, 'error'));
+  }
 };

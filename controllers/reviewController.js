@@ -18,7 +18,7 @@ exports.createReview = async (req, res, next) => {
     res.status(200).send(review);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(400).json({ msg: err.message });
   }
 };
 

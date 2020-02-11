@@ -4,7 +4,6 @@ const config = require('config');
 
 const User = require('../models/userModel');
 
-// Logs in a user
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -12,13 +11,14 @@ exports.loginUser = async (req, res) => {
     let user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
+      return res.status(400).json({ msg: 'No user by that email' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
+      return res.status(400).json({ msg: 'Invalid Credentials' });
     }
 
     const payload = {
@@ -83,6 +83,30 @@ exports.getActiveListingsByUser = async (req, res, next) => {
         listings
       }
     });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+};
+
+exports.updatePassword = async (req, res, next) => {
+  try {
+    let user = await User.findById(req.user.id);
+
+    const isMatch = await bcrypt.compare(
+      req.body.currentPassword,
+      user.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({ msg: 'Invalid Credentials' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+
+    user.password = await bcrypt.hash(req.body.newPassword, salt);
+    await user.save();
+    res.status(201).json(req.user);
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ msg: 'Server Error' });

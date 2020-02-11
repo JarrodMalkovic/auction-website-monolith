@@ -124,7 +124,12 @@ const Listing = ({
         ) : (
           <div>
             {data.bids.map(bid => (
-              <BidItem listingId={data._id} key={bid._id} bid={bid} />
+              <BidItem
+                listingId={data._id}
+                key={bid._id}
+                bid={bid}
+                socket={socket}
+              />
             ))}
           </div>
         )}
@@ -139,6 +144,7 @@ const Listing = ({
                 data.minIncrement}`}
               name='bid'
               value={bid}
+              step='0.01'
               onChange={e => onChange(e)}
               disabled={data.active ? false : true}
               required

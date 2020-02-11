@@ -9,16 +9,23 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const authLinks = (
     <ul>
       <li>
-        <NavLink to='/home'>Home</NavLink>
+        <NavLink to='/home'>
+          <i className='fas fa-home' /> <span className='hide-sm'>Home</span>
+        </NavLink>
       </li>
       <li>
-        <NavLink to='/dashboard'>Dashboard</NavLink>
+        <NavLink to='/dashboard'>
+          <i className='fas fa-id-card' />{' '}
+          <span className='hide-sm'>Dashboard</span>
+        </NavLink>
       </li>
       <li>
-        <NavLink to='/create'>Create Listing</NavLink>
+        <NavLink to='/create'>
+          <i className='fas fa-plus-circle' />{' '}
+          <span className='hide-sm'>Create listing</span>
+        </NavLink>
       </li>
       <li>
-        {' '}
         <a onClick={logout} href=''>
           <i className='fas fa-sign-out-alt' />{' '}
           <span className='hide-sm'>Logout</span>
@@ -33,13 +40,21 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const guestLinks = (
     <ul>
       <li>
-        <NavLink to='/home'>Home</NavLink>
+        <NavLink to='/home'>
+          <i className='fas fa-home' /> <span className='hide-sm'>Home</span>
+        </NavLink>
       </li>
       <li>
-        <NavLink to='/login'>Login</NavLink>
+        <NavLink to='/login'>
+          <i className='fas fa-sign-in-alt' />{' '}
+          <span className='hide-sm'>Login</span>
+        </NavLink>
       </li>
       <li>
-        <NavLink to='/register'>Register</NavLink>
+        <NavLink to='/register'>
+          <i class='fas fa-user-plus'></i>{' '}
+          <span className='hide-sm'>Register</span>
+        </NavLink>
       </li>
       <li>
         <SearchBar />

@@ -74,7 +74,7 @@ const ProfilePage = ({
   ) : (
     <Fragment>
       <Helmet>
-        <title>{user.data.name} | Auction</title>
+        <title>{user.data.name}'s profile | Auction</title>
       </Helmet>
       <img src={user.data.avatar} alt='User profile picture' />
       <h2>{user.data.name}</h2>

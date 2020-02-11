@@ -5,7 +5,8 @@ import {
   GET_REVIEWS,
   DELETE_REVIEW,
   CLEAR_REVIEW,
-  MARK_REVIEW_HELPFUL
+  MARK_REVIEW_HELPFUL,
+  REVIEW_ERROR
 } from './types';
 import { addNotification } from './notification';
 
@@ -57,16 +58,15 @@ export const getReview = id => async dispatch => {
     dispatch({ type: GET_REVIEW, payload: res.data.review });
   } catch (err) {
     console.log(`Error: ${err.response.data.msg}`);
+    dispatch({ type: REVIEW_ERROR });
   }
 };
 
 export const clearReviews = () => async dispatch => {
-  console.log('Clearing');
   dispatch({ type: CLEAR_REVIEWS });
 };
 
 export const clearReview = () => async dispatch => {
-  console.log('Clearing');
   dispatch({ type: CLEAR_REVIEW });
 };
 

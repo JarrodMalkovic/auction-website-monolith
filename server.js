@@ -42,6 +42,11 @@ io.on('connection', function(socket) {
     console.log('user made bid on' + room);
   });
 
+  socket.on('deleted bid', function() {
+    io.to(room).emit('bid');
+    console.log('user made bid on' + room);
+  });
+
   socket.on('chat message', function(msg) {
     io.to(room).emit('chat message', msg);
   });
@@ -63,6 +68,6 @@ app.use('/api/auth', require('./routes/api/authRouter'));
 app.use('/api/review', require('./routes/api/reviewRouter'));
 app.use('/api/report', require('./routes/api/reportRouter'));
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 server.listen(PORT, () => console.log(`Server started on port ${PORT}`));

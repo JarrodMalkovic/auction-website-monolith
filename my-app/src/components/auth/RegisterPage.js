@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { register } from '../../actions/auth';
 import { Helmet } from 'react-helmet';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Register = ({ register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -14,13 +15,22 @@ const Register = ({ register, isAuthenticated }) => {
 
   const { email, name, password, passwordConfirm } = formData;
 
+  const [verified, setVerified] = useState(false);
+
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
     e.preventDefault();
-    console.log(email, password);
-    register(name, email, password);
+    if (verified) {
+      register(name, email, password, passwordConfirm);
+    } else {
+      alert('Do the CAPTCHA');
+    }
+  };
+
+  const verifyCallback = async e => {
+    await setVerified(true);
   };
 
   if (isAuthenticated) {
@@ -77,7 +87,12 @@ const Register = ({ register, isAuthenticated }) => {
             minLength='3'
           />
         </div>
-        <input type='submit' className='btn btn-primary' value='Login' />
+        <ReCAPTCHA
+          sitekey='6Lcck9cUAAAAAIuHfUVETNVzklfJ6QkJ69V5tor0'
+          onChange={verifyCallback}
+        />
+
+        <input type='submit' className='btn btn-primary' value='Register' />
       </form>
       <p className='my-1'>
         Already have an account? <Link to='/login'>Log in</Link>

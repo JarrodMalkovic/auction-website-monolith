@@ -12,7 +12,7 @@ const EditReviewPage = ({
   clearReview,
   history,
   editReview,
-  review: { data, loading }
+  review: { data, loading, errors }
 }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -48,7 +48,13 @@ const EditReviewPage = ({
     console.log('edit');
   };
 
-  if (!auth.loading && data != null && auth.user != null && !loading) {
+  if (
+    !auth.loading &&
+    data != null &&
+    auth.user != null &&
+    !loading &&
+    !errors
+  ) {
     if (auth.user._id != data.writtenBy) {
       console.log('data:');
       console.log(data);
@@ -59,8 +65,11 @@ const EditReviewPage = ({
     }
   }
 
-  return loading || data === null || auth.user === null || auth.loading ? (
+  return (loading || data === null || auth.user === null || auth.loading) &&
+    !errors ? (
     <div>Loading..</div>
+  ) : errors ? (
+    <div>No review found</div>
   ) : (
     <div>
       <Helmet>

@@ -14,7 +14,7 @@ const EditListingPage = ({
   history,
   getListing,
   clearListing,
-  listing: { data, loading }
+  listing: { data, loading, errors }
 }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -84,14 +84,16 @@ const EditListingPage = ({
     );
   };
 
-  if (!authLoading && data != null && user != null) {
+  if (!authLoading && data != null && user != null && !errors) {
     if (user._id != data.createdBy._id) {
       return <Redirect to='/dashboard' />;
     }
   }
 
-  return loading || data === null ? (
+  return (loading || data === null) && !errors ? (
     <div>Loading..</div>
+  ) : errors ? (
+    <div>No listing found</div>
   ) : (
     <Fragment>
       <Helmet>
