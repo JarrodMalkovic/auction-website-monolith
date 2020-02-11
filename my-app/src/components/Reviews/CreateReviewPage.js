@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import { createReview } from '../../actions/review';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import ReCAPTCHA from 'react-google-recaptcha';
 
-const ReviewForm = ({ createReview, match, history }) => {
+const CreateReviewPage = ({ createReview, match, history }) => {
   const [formData, setFormData] = useState({
     title: '',
     text: '',
     rating: 1
   });
+
+  const [verified, setVerified] = useState(false);
 
   const { title, text, rating } = formData;
 
@@ -18,8 +21,17 @@ const ReviewForm = ({ createReview, match, history }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    createReview(match.params.id, title, text, rating, history);
+    if (verified) {
+      createReview(match.params.id, title, text, rating, history);
+    } else {
+      alert('Do the CAPTCHA');
+    }
   };
+
+  const verifyCallback = async e => {
+    await setVerified(true);
+  };
+
   return (
     <div>
       <Helmet>
@@ -57,6 +69,10 @@ const ReviewForm = ({ createReview, match, history }) => {
             required
           />
         </div>
+        <ReCAPTCHA
+          sitekey='6Lcck9cUAAAAAIuHfUVETNVzklfJ6QkJ69V5tor0'
+          onChange={verifyCallback}
+        />
         <input
           type='submit'
           className='btn btn-primary'
@@ -67,6 +83,6 @@ const ReviewForm = ({ createReview, match, history }) => {
   );
 };
 
-ReviewForm.propTypes = {};
+CreateReviewPage.propTypes = {};
 
-export default connect(null, { createReview })(ReviewForm);
+export default connect(null, { createReview })(CreateReviewPage);

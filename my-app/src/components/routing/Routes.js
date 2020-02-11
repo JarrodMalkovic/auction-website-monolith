@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import PrivateRoute from '../routing/PrivateRoute';
 import ProfilePage from '../Profile/ProfilePage';
 import Dashboard from '../Dashboard/Dashboard';
-import ReviewForm from '../Reviews/ReviewForm';
+import CreateReviewPage from '../Reviews/CreateReviewPage';
 import EditProfilePage from '../Profile/EditProfilePage';
 import YourListingsPage from '../Dashboard/YourListingsPage';
 import BiddingHistoryPage from '../Dashboard/BiddingHistoryPage';
@@ -38,7 +38,7 @@ const Routes = ({ loadUser, dispatch }) => {
           component={EditListingPage}
         />
         <Route exact path='/profile/:id' component={ProfilePage} />
-        <Route exact path='/profile/:id/review' component={ReviewForm} />
+        <Route exact path='/profile/:id/review' component={CreateReviewPage} />
         <PrivateRoute exact path='/dashboard' component={Dashboard} />
         <PrivateRoute
           exact

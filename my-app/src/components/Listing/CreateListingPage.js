@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ImageUpload from '../Forms/ImageUpload';
 import { Helmet } from 'react-helmet';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,8 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
   });
 
   const [endDate, setEndDate] = useState(new Date());
+
+  const [verified, setVerified] = useState(false);
 
   let {
     title,
@@ -48,17 +51,25 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    createListing(
-      title,
-      description,
-      minIncrement,
-      category,
-      endDate,
-      condition,
-      startPrice,
-      image,
-      history
-    );
+    if (verified) {
+      createListing(
+        title,
+        description,
+        minIncrement,
+        category,
+        endDate,
+        condition,
+        startPrice,
+        image,
+        history
+      );
+    } else {
+      alert('Do the CAPTCHA');
+    }
+  };
+
+  const verifyCallback = async e => {
+    await setVerified(true);
   };
 
   const setParentImage = childImage => {
@@ -153,7 +164,10 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
             }}
           />
         </div>
-
+        <ReCAPTCHA
+          sitekey='6Lcck9cUAAAAAIuHfUVETNVzklfJ6QkJ69V5tor0'
+          onChange={verifyCallback}
+        />
         <input
           type='submit'
           className='btn btn-primary'

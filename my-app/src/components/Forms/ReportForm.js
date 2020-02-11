@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactModal from 'react-modal';
 import { createReport } from '../../actions/report';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const ReportForm = ({ type, createReport, id }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ const ReportForm = ({ type, createReport, id }) => {
   const [modalData, setModalData] = useState({
     showModal: false
   });
+
+  const [verified, setVerified] = useState(false);
 
   const { reportedRef, reason } = formData;
 
@@ -31,10 +34,20 @@ const ReportForm = ({ type, createReport, id }) => {
 
   const onChange = e => setFormData({ ...formData, reason: e.target.value });
 
+  const verifyCallback = async e => {
+    await setVerified(true);
+  };
+
   const onSubmit = async e => {
     e.preventDefault();
-    createReport(id, reason, reportedRef);
-    handleCloseModal();
+    if (verified) {
+      createReport(id, reason, reportedRef);
+      handleCloseModal();
+      setFormData({ ...formData, reason: '' });
+      await setVerified(false);
+    } else {
+      alert('Do the CAPTCHA');
+    }
   };
 
   return (
@@ -58,6 +71,10 @@ const ReportForm = ({ type, createReport, id }) => {
               required
             />
           </div>
+          <ReCAPTCHA
+            sitekey='6Lcck9cUAAAAAIuHfUVETNVzklfJ6QkJ69V5tor0'
+            onChange={verifyCallback}
+          />
           <input
             type='submit'
             className='btn btn-primary'
