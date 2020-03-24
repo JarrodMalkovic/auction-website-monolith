@@ -19,7 +19,6 @@ export const getUserByToken = () => async dispatch => {
 export const updateUserProfile = (
   name,
   email,
-  password,
   location,
   bio
 ) => async dispatch => {
@@ -32,7 +31,6 @@ export const updateUserProfile = (
   const body = {
     name,
     email,
-    password,
     location,
     bio
   };
@@ -41,12 +39,11 @@ export const updateUserProfile = (
     await axios.patch('/api/users/me', body, config);
     dispatch(addNotification('Profile updated Successfully', 'success'));
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err.response.data.message}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };
 
 export const clearUser = () => async dispatch => {
-  console.log('test');
   dispatch({ type: CLEAR_USER });
 };

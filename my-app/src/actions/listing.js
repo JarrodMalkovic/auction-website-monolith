@@ -15,10 +15,11 @@ import { addNotification } from './notification';
 export const getListings = query => async dispatch => {
   try {
     const res = await axios.get(`/api/listings/${query}`);
-
+    console.log('getting listings');
+    console.log(res);
     dispatch({ type: GET_LISTINGS, payload: res.data });
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
+    console.log(`Error: ${err.response.data.message}`);
   }
 };
 
@@ -28,7 +29,7 @@ export const getListing = slug => async dispatch => {
 
     dispatch({ type: GET_LISTING, payload: res.data.listing });
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
+    console.log(`Error: ${err.response.data.message}`);
     dispatch({ type: LISTING_ERROR });
   }
 };
@@ -60,16 +61,13 @@ export const createListing = (
     startPrice,
     image
   };
-
   try {
     const res = await axios.post('/api/listings', body, config);
-    console.log(res);
 
     history.push(`/listings/${res.data.listing.slug}`);
-    dispatch(addNotification('Listing Created Successfully', 'success'));
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };
 
@@ -79,19 +77,17 @@ export const deleteListing = id => async dispatch => {
     dispatch({ type: DELETE_LISTING, payload: res.data });
     dispatch(addNotification('Listing Deleted Successfully', 'success'));
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err.response.data.message}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };
 
 export const editListing = (
   title,
   description,
-  minIncrement,
   category,
-  length,
   condition,
-  startPrice,
+  minIncrement,
   id,
   history
 ) => async dispatch => {
@@ -104,10 +100,8 @@ export const editListing = (
   const body = {
     title,
     description,
-    minIncrement,
     category,
-    length,
-    startPrice,
+    minIncrement,
     condition
   };
 
@@ -116,8 +110,8 @@ export const editListing = (
     history.push(`/listings/${res.data.listing.slug}`);
     dispatch(addNotification('Listing Updated Successfully', 'success'));
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err.response.data.message}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };
 
@@ -143,15 +137,10 @@ export const makeBid = (bid, listingId) => async dispatch => {
       type: GET_LISTING,
       payload: res.data.listing
     });
-    dispatch(
-      addNotification(
-        `Bid on item "${res.data.listing.title}" Placed Successfully`,
-        'success'
-      )
-    );
+    dispatch(addNotification('Placed bid successfully', 'success'));
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err.response.data.message}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };
 
@@ -163,7 +152,7 @@ export const getActiveListingsByUserId = id => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
+    console.log(`Error: ${err.response}`);
   }
 };
 
@@ -175,7 +164,7 @@ export const getInactiveListingsByUserId = id => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
+    console.log(`Error: ${err.response.data.message}`);
   }
 };
 
@@ -188,7 +177,7 @@ export const getActiveListingsByToken = id => async dispatch => {
     });
     console.log(res.data);
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
+    console.log(`Error: ${err.response.data.message}`);
   }
 };
 
@@ -200,7 +189,7 @@ export const getInactiveListingsByToken = id => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
+    console.log(`Error: ${err.response.data.message}`);
   }
 };
 
@@ -212,7 +201,7 @@ export const getBiddingHistory = () => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
+    console.log(`Error: ${err.response.data.message}`);
   }
 };
 
@@ -224,7 +213,7 @@ export const getWonListings = () => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
+    console.log(`Error: ${err.response.data.message}`);
   }
 };
 
@@ -254,8 +243,8 @@ export const setListingShipped = id => async dispatch => {
       )
     );
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err.response.data.message}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };
 
@@ -270,7 +259,7 @@ export const deleteBid = (listingId, bidId) => async dispatch => {
       )
     );
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err.response.data.message}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };

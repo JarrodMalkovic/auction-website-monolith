@@ -17,7 +17,7 @@ export const createReport = (id, reason, reportedRef) => async dispatch => {
     await axios.post(`/api/report/${id}`, body, config);
     dispatch(addNotification('Report Created Successfully!', 'success'));
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err.response.data.message}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };

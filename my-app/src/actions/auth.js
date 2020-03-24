@@ -39,7 +39,7 @@ export const loadUser = () => async dispatch => {
     dispatch({ type: USER_LOADED, payload: res.data });
   } catch (err) {
     dispatch({ type: USER_LOADING_ERROR });
-    console.log(`Error: ${err.response.msg}`);
+    console.log(`Error: ${err.response.data.message}`);
   }
 };
 
@@ -69,8 +69,8 @@ export const register = (
     dispatch({ type: REGISTER_SUCCESS, payload: res.data });
     dispatch(loadUser());
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err.response.data.message}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };
 
@@ -85,17 +85,17 @@ export const updatePassword = (
   newPassword,
   newPasswordConfirm
 ) => async dispatch => {
-  console.log(currentPassword, newPassword, newPasswordConfirm);
-  if (newPassword !== newPasswordConfirm) {
-    return dispatch(addNotification("New passwords don't match", 'error'));
-  }
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  };
-
   try {
+    if (newPassword !== newPasswordConfirm) {
+      return dispatch(addNotification("New passwords don't match", 'error'));
+    }
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
     await axios.patch(
       '/api/auth/update-password',
       { currentPassword, newPassword },
@@ -103,7 +103,7 @@ export const updatePassword = (
     );
     dispatch(addNotification('Password Successfully Updated', 'success'));
   } catch (err) {
-    console.log(`Error: ${err.response.data.msg}`);
-    dispatch(addNotification(err.response.data.msg, 'error'));
+    console.log(`Error: ${err.response.data.message}`);
+    dispatch(addNotification(err.response.data.message, 'error'));
   }
 };
