@@ -1,114 +1,95 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 const User = require('../models/userModel');
 
-exports.loginUser = async (req, res) => {
+exports.loginUser = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
-  try {
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({ msg: 'No user by that email' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    console.log(password, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
-    }
-
-    const payload = {
-      user: {
-        id: user._id
-      }
-    };
-
-    jwt.sign(
-      payload,
-      config.get('jwtSecret'),
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).json({ msg: 'Server Error' });
+  if (!email || !password) {
+    return next(new AppError('Please provide email and password', 400));
   }
-};
 
-exports.authenticate = async (req, res, next) => {
+  let user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new AppError('Incorrect email or password', 401));
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    return next(new AppError('Incorrect email or password', 401));
+  }
+
+  const payload = {
+    user: {
+      id: user._id
+    }
+  };
+
+  jwt.sign(
+    payload,
+    config.get('jwtSecret'),
+    { expiresIn: 360000 },
+    (err, token) => {
+      if (err) throw err;
+      res.json({ token });
+    }
+  );
+});
+
+exports.authenticate = catchAsync(async (req, res, next) => {
   // Get token from header
   const token = req.header('x-auth-token');
 
   // Check if not token
   if (!token) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
+    return next(new AppError('No token, authorization denied', 401));
   }
 
   // Verify token
-  try {
-    await jwt.verify(token, config.get('jwtSecret'), (error, decoded) => {
-      if (error) {
-        res.status(401).json({ msg: 'Token is not valid' });
-      } else {
-        req.user = decoded.user;
-        next();
-      }
-    });
-  } catch (err) {
-    console.error('something wrong with auth middleware');
-    res.status(500).json({ msg: 'Server Error' });
-  }
-};
-
-exports.getActiveListingsByUser = async (req, res, next) => {
-  try {
-    const listings = await Listing.find(
-      {
-        createdBy: req.params.user_id
-      },
-      { active: true }
-    );
-
-    res.status(200).json({
-      status: 'success',
-      listings: listings.length,
-      data: {
-        listings
-      }
-    });
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).json({ msg: 'Server Error' });
-  }
-};
-
-exports.updatePassword = async (req, res, next) => {
-  try {
-    let user = await User.findById(req.user.id);
-
-    const isMatch = await bcrypt.compare(
-      req.body.currentPassword,
-      user.password
-    );
-
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
+  await jwt.verify(token, config.get('jwtSecret'), (error, decoded) => {
+    if (error) {
+      return next(new AppError('Token is not valid', 401));
+    } else {
+      req.user = decoded.user;
+      next();
     }
+  });
+});
 
-    const salt = await bcrypt.genSalt(10);
+exports.getActiveListingsByUser = catchAsync(async (req, res, next) => {
+  const listings = await Listing.find(
+    {
+      createdBy: req.params.user_id
+    },
+    { active: true }
+  );
 
-    user.password = await bcrypt.hash(req.body.newPassword, salt);
-    await user.save();
-    res.status(201).json(req.user);
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).json({ msg: 'Server Error' });
+  res.status(200).json({
+    status: 'success',
+    listings: listings.length,
+    data: {
+      listings
+    }
+  });
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  let user = await User.findById(req.user.id);
+
+  const isMatch = await bcrypt.compare(req.body.currentPassword, user.password);
+
+  if (!isMatch) {
+    return next(new AppError('Invalid Credentials', 400));
   }
-};
+
+  const salt = await bcrypt.genSalt(10);
+
+  user.password = await bcrypt.hash(req.body.newPassword, salt);
+  await user.save();
+  res.status(201).json(req.user);
+});

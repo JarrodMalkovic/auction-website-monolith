@@ -1,32 +1,30 @@
 const Report = require('../models/reportModel');
 
-exports.createReport = async (req, res, next) => {
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
+
+exports.createReport = catchAsync(async (req, res, next) => {
   const { reason, reportedRef } = req.body;
+
+  if (!(reason && reportedRef)) {
+    return next(new AppError('Missing required fields', 400));
+  }
+
   reportedBy = req.user.id;
   reported = req.params.id;
-  try {
-    report = new Report({
-      reportedBy,
-      reported,
-      reason,
-      reportedRef
-    });
+  report = new Report({
+    reportedBy,
+    reported,
+    reason,
+    reportedRef
+  });
 
-    await report.save();
+  await report.save();
 
-    res.status(200).send(report);
-  } catch (err) {
-    console.log(err.message);
-    res.status(400).json({ msg: err.message });
-  }
-};
+  res.status(200).send(report);
+});
 
-exports.getReports = async (req, res, next) => {
-  try {
-    const reports = await Report.find().populate('reported reportedBy');
-    res.status(200).json({ reports });
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).json({ msg: 'Server Error' });
-  }
-};
+exports.getReports = catchAsync(async (req, res, next) => {
+  const reports = await Report.find().populate('reported reportedBy');
+  res.status(200).json({ reports });
+});
