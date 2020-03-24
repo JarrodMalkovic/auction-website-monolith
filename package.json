@@ -7,7 +7,7 @@
     "start": "node server",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --forceExit",
     "server": "nodemon server",
-    "client": "npm start --prefix my-app",
+    "client": "npm start --prefix client",
     "dev": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
   },
   "jest": {
