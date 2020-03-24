@@ -5,8 +5,12 @@ const cloudinary = require('cloudinary');
 const app = express();
 var server = require('http').Server(app);
 const io = require('socket.io')(server);
+const globalErrorHandler = require('./controllers/errorController.js');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
+const AppError = require('./utils/appError');
+
+const dotenv = require('dotenv').config({ path: './config.env' });
 
 // Connect Database
 connectDB();
@@ -52,10 +56,10 @@ io.on('connection', function(socket) {
   });
 });
 
-//Data sanitization against NoSQL query injections
+// Data sanitization against NoSQL query injections
 app.use(mongoSanitize());
 
-//Data Sanitization against XSS
+// Data Sanitization against XSS
 app.use(xss());
 
 // Init Middleware
@@ -68,6 +72,16 @@ app.use('/api/auth', require('./routes/api/authRouter'));
 app.use('/api/review', require('./routes/api/reviewRouter'));
 app.use('/api/report', require('./routes/api/reportRouter'));
 
-const PORT = 5000;
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
 
-server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.use(globalErrorHandler);
+
+const PORT = process.env.PORT || 5000;
+
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+}
+
+module.exports = server;
