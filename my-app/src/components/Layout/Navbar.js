@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import SearchBar from '../Forms/SearchBar';
 import { connect } from 'react-redux';
@@ -6,33 +6,52 @@ import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
 
 const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
+  const toggleMobileDisplay = () => {
+    console.log('toggled');
+    const navbar = document.querySelector('.navbar');
+    if (navbar.className === 'navbar') {
+      navbar.className += ' responsive';
+    } else {
+      navbar.className = 'navbar';
+    }
+  };
+
   const authLinks = (
     <ul>
       <li>
-        <NavLink to='/home'>
-          <i className='fas fa-home' /> <span className='hide-sm'>Home</span>
+        <a className='Nav_link icon' onClick={toggleMobileDisplay}>
+          &#9776;
+        </a>
+        <NavLink to='/home' activeClassName='selected' className='Nav_link'>
+          <i className='fas fa-home' /> <span>Home</span>
+        </NavLink>
+        <NavLink
+          to='/dashboard'
+          activeClassName='selected'
+          className='Nav_link'
+        >
+          <i className='fas fa-id-card' /> <span>Dashboard</span>
         </NavLink>
       </li>
-      <li>
-        <NavLink to='/dashboard'>
-          <i className='fas fa-id-card' />{' '}
-          <span className='hide-sm'>Dashboard</span>
-        </NavLink>
+      <li class='searchBar'>
+        <SearchBar />
       </li>
       <li>
-        <NavLink to='/create'>
+        <NavLink to='/create' activeClassName='selected' className='Nav_link'>
           <i className='fas fa-plus-circle' />{' '}
           <span className='hide-sm'>Create listing</span>
         </NavLink>
-      </li>
-      <li>
-        <a onClick={logout} href=''>
-          <i className='fas fa-sign-out-alt' />{' '}
-          <span className='hide-sm'>Logout</span>
-        </a>
-      </li>
-      <li>
-        <SearchBar />
+        <NavLink
+          to='/logout'
+          activeClassName='selected'
+          className='Nav_link'
+          exact={true}
+        >
+          <a onClick={logout}>
+            <i className='fas fa-sign-out-alt' />{' '}
+            <span className='hide-sm'>Logout</span>
+          </a>
+        </NavLink>
       </li>
     </ul>
   );
@@ -40,34 +59,40 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const guestLinks = (
     <ul>
       <li>
-        <NavLink to='/home'>
+        <NavLink to='/home' activeClassName='selected' className='Nav_link'>
           <i className='fas fa-home' /> <span className='hide-sm'>Home</span>
         </NavLink>
       </li>
+      <li class='searchBar'>
+        <SearchBar />
+      </li>
       <li>
-        <NavLink to='/login'>
+        <NavLink
+          to='/login'
+          activeClassName='selected'
+          className='Nav_link  rightLink'
+        >
           <i className='fas fa-sign-in-alt' />{' '}
           <span className='hide-sm'>Login</span>
         </NavLink>
-      </li>
-      <li>
-        <NavLink to='/register'>
+        <NavLink
+          to='/register'
+          activeClassName='selected'
+          className='Nav_link  rightLink'
+        >
           <i class='fas fa-user-plus'></i>{' '}
           <span className='hide-sm'>Register</span>
         </NavLink>
-      </li>
-      <li>
-        <SearchBar />
       </li>
     </ul>
   );
 
   return (
-    <div>
+    <nav>
       {!loading && (
-        <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+        <div className='navbar'>{isAuthenticated ? authLinks : guestLinks}</div>
       )}
-    </div>
+    </nav>
   );
 };
 
