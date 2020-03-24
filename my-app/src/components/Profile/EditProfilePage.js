@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getUserByToken, updateUserProfile } from '../../actions/user';
 import { updatePassword } from '../../actions/auth';
 import { Link } from 'react-router-dom';
+import Spinner from '../Layout/Spinner';
 
 const EditProfilePage = ({
   getUserByToken,
@@ -61,101 +62,107 @@ const EditProfilePage = ({
   };
 
   return loading || data === null ? (
-    <div>Loading..</div>
+    <Spinner />
   ) : (
     <Fragment>
-      <Link to={`/dashboard`}>
-        <h4>Back to Dashboard</h4>
-      </Link>
-      <h1>Edit your Profile</h1>
-      <h1>About You</h1>
-      <form className='form' onSubmit={e => handleUpdateProfile(e)}>
-        <h3>Your name</h3>
-        <div className='form-group'>
+      <div className='row'>
+        <Link to={`/dashboard`}>
+          <h4>Back to Dashboard</h4>
+        </Link>
+        <form className='form' onSubmit={e => handleUpdateProfile(e)}>
+          <h2 className='large-heading'>Edit your Profile</h2>
+          <p className='small-text'>Tell us about yourself</p>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Your name</h4>
+            <input
+              type='text'
+              placeholder='Your Name'
+              name='name'
+              value={name}
+              onChange={e => onChange(e)}
+              required
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Your email</h4>
+            <input
+              type='text'
+              placeholder='* Name of Item'
+              name='email'
+              value={email}
+              onChange={e => onChange(e)}
+              required
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Your Biography</h4>
+            <textarea
+              type='text'
+              placeholder='Enter a bio'
+              name='bio'
+              value={bio}
+              onChange={e => onChange(e)}
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Your location</h4>
+            <input
+              type='text'
+              placeholder='Location'
+              name='location'
+              value={location}
+              onChange={e => onChange(e)}
+            />
+          </div>
           <input
-            type='text'
-            placeholder='Your Name'
-            name='name'
-            value={name}
-            onChange={e => onChange(e)}
-            required
+            type='submit'
+            className='btn-gray large full'
+            value='Edit Profile'
           />
-        </div>
-        <div className='form-group'>
-          <h3>Your email</h3>
+        </form>
+        <form className='form' onSubmit={e => handleUpdatePassword(e)}>
+          <h2 className='large-heading'>Change Password</h2>
+          <p className='small-text'>
+            It's a good idea to use a strong password that you're not using
+            elsewhere
+          </p>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Current Password</h4>
+            <input
+              type='password'
+              placeholder='Current Password'
+              name='currentPassword'
+              value={currentPassword}
+              onChange={e => onChange(e)}
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>New Password</h4>
+            <input
+              type='password'
+              placeholder='New password'
+              name='newPassword'
+              value={newPassword}
+              onChange={e => onChange(e)}
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Confirm new Password</h4>
+            <input
+              type='password'
+              placeholder='Confirm new Password'
+              name='confirmNewPassword'
+              value={confirmNewPassword}
+              onChange={e => onChange(e)}
+            />
+          </div>
           <input
-            type='text'
-            placeholder='* Name of Item'
-            name='email'
-            value={email}
-            onChange={e => onChange(e)}
-            required
+            type='submit'
+            className='btn-gray large full'
+            value='Update Password'
           />
-        </div>
-        <h3>Your Biography</h3>
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Enter a bio'
-            name='bio'
-            value={bio}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <h3>Your location</h3>
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Location'
-            name='location'
-            value={location}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <input type='submit' className='btn btn-primary' value='Edit Profile' />
-      </form>
-      <form className='form' onSubmit={e => handleUpdatePassword(e)}>
-        <h1>Change Password</h1>
-        <p>
-          It's a good idea to use a strong password that you're not using
-          elsewhere
-        </p>
-        <h3>Current Password</h3>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Current Password'
-            name='currentPassword'
-            value={currentPassword}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <h3>New Password</h3>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='New password'
-            name='newPassword'
-            value={newPassword}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <h3>Confirm new Password</h3>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Confirm new Password'
-            name='confirmNewPassword'
-            value={confirmNewPassword}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <input
-          type='submit'
-          className='btn btn-primary'
-          value='Update Password'
-        />
-      </form>
+        </form>
+      </div>
     </Fragment>
   );
 };
@@ -164,6 +171,7 @@ const mapStateToProps = state => ({
   user: state.user,
   isAuthenticated: state.auth.isAuthenticated
 });
+
 export default connect(mapStateToProps, {
   getUserByToken,
   updatePassword,

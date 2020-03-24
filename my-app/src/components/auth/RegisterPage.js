@@ -42,61 +42,75 @@ const Register = ({ register, isAuthenticated }) => {
       <Helmet>
         <title>Create an account | Auction</title>
       </Helmet>
-      <h1 className='large text-primary'>Register</h1>
-      <p className='lead'>
-        <i className='fas fa-user' /> Register an Account
-      </p>
-      <form className='form' onSubmit={e => onSubmit(e)}>
-        <div className='form-group'>
+      <div className='row'>
+        <form className='form' onSubmit={e => onSubmit(e)}>
+          <h2 className='large-heading'>Sign up</h2>
+          <p className='small-text'>
+            <i className='fas fa-user' /> Sign Up for an Account
+          </p>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Name</h4>
+            <input
+              type='text'
+              placeholder='Name'
+              name='name'
+              value={name}
+              onChange={e => onChange(e)}
+              required
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Email</h4>
+            <input
+              type='email'
+              placeholder='Email Address'
+              name='email'
+              value={email}
+              onChange={e => onChange(e)}
+              required
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Password</h4>
+            <input
+              type='password'
+              placeholder='Password'
+              name='password'
+              value={password}
+              onChange={e => onChange(e)}
+              minLength='3'
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Confirm Password</h4>
+            <input
+              type='password'
+              placeholder='Confirm Password'
+              name='passwordConfirm'
+              value={passwordConfirm}
+              onChange={e => onChange(e)}
+              minLength='3'
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Captcha</h4>
+            <div className='recaptcha-container'>
+              <ReCAPTCHA
+                sitekey='6Lcck9cUAAAAAIuHfUVETNVzklfJ6QkJ69V5tor0'
+                onChange={verifyCallback}
+              />
+            </div>
+          </div>
           <input
-            type='text'
-            placeholder='Name'
-            name='name'
-            value={name}
-            onChange={e => onChange(e)}
-            required
+            type='submit'
+            className='btn-gray large full'
+            value='Register'
           />
-        </div>
-        <div className='form-group'>
-          <input
-            type='email'
-            placeholder='Email Address'
-            name='email'
-            value={email}
-            onChange={e => onChange(e)}
-            required
-          />
-        </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Password'
-            name='password'
-            value={password}
-            onChange={e => onChange(e)}
-            minLength='3'
-          />
-        </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Confirm Password'
-            name='passwordConfirm'
-            value={passwordConfirm}
-            onChange={e => onChange(e)}
-            minLength='3'
-          />
-        </div>
-        <ReCAPTCHA
-          sitekey='6Lcck9cUAAAAAIuHfUVETNVzklfJ6QkJ69V5tor0'
-          onChange={verifyCallback}
-        />
-
-        <input type='submit' className='btn btn-primary' value='Register' />
-      </form>
-      <p className='my-1'>
-        Already have an account? <Link to='/login'>Log in</Link>
-      </p>
+        </form>
+        <p className='small-text'>
+          Already have an account? <Link to='/login'>Log in</Link>
+        </p>
+      </div>
     </Fragment>
   );
 };

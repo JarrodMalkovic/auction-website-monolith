@@ -26,20 +26,32 @@ const PaginationButtons = ({
     getListings(search);
   };
   return (
-    <div>
-      {parsed.page > 1 && (
-        <button onClick={() => onClick(parseInt(parsed.page) - 1)}>
-          {'<'}
+    <div className='pagination-buttons-div'>
+      <span className='pagination-buttons small-text'>
+        <button className='btn-gray large' onClick={() => onClick(1)}>
+          First Page
         </button>
-      )}
-      <button onClick={() => onClick(1)}>First Page</button>
-      Page {parsed.page}
-      <button onClick={() => onClick(lastPage)}>Last Page</button>
-      {parseInt(parsed.page) < lastPage && (
-        <button onClick={() => onClick(parseInt(parsed.page) + 1)}>
-          {'>'}
+        {parsed.page > 1 && (
+          <button
+            className='btn-gray large'
+            onClick={() => onClick(parseInt(parsed.page) - 1)}
+          >
+            <i class='fas fa-arrow-left'></i>
+          </button>
+        )}
+        Page {parsed.page}
+        {parseInt(parsed.page) < lastPage && (
+          <button
+            className='btn-gray large'
+            onClick={() => onClick(parseInt(parsed.page) + 1)}
+          >
+            <i class='fas fa-arrow-right'></i>
+          </button>
+        )}
+        <button className='btn-gray large' onClick={() => onClick(lastPage)}>
+          Last Page
         </button>
-      )}
+      </span>
     </div>
   );
 };

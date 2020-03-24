@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import EditReviewModal from './EditReviewModal';
 import { deleteReview, markReviewAsHelpful } from '../../actions/review';
-import ReportForm from '../Forms/ReportForm';
+import ReportForm from '../Report/ReportForm';
+import StarRatingComponent from 'react-star-rating-component';
 
 const ReviewItem = ({ review, auth, deleteReview, markReviewAsHelpful }) => {
   const [uploading, setUploading] = useState(false);
@@ -17,42 +19,39 @@ const ReviewItem = ({ review, auth, deleteReview, markReviewAsHelpful }) => {
     setUploading(false);
   };
   return (
-    <div>
-      <h2>{review.title}</h2>
-      <h2>
-        Written by{' '}
-        <Link to={`/profile/${review.writtenBy}`}>
+    <div className='review-item'>
+      <h2 className='medium-heading'>{review.title}</h2>
+      <div style={{ fontSize: 40 }}>
+        <StarRatingComponent editing={false} value={review.rating} />
+      </div>
+      <p className='small-text'>{review.text}</p>
+      <p className='small-text'>
+        By{' '}
+        <Link to={`/profile/${review.writtenBy.split(' ')[0]}`}>
           {review.writtenBy} on {review.writtenAt}
         </Link>
-      </h2>
-      <p>
-        {review.helpfulCount} {review.helpfulCount === 1 ? 'person' : 'people'}{' '}
-        found this review helpful
       </p>
-      <p>{review.rating}/5</p>
-      <p>{review.text}</p>
-
       {!auth.loading && auth.user._id === review.writtenBy && (
         <div>
-          <Link to={`/reviews/${review._id}/edit`}>Edit</Link>
-          <button onClick={handleDeleteOption}>Delete Review</button>
+          <EditReviewModal id={review._id} />
+          <button className='white-btn large' onClick={handleDeleteOption}>
+            Delete Review
+          </button>
         </div>
       )}
-
       {!auth.loading &&
         auth.isAuthenticated &&
-        auth.user._id != review.writtenBy &&
-        (review.markedAsHelpful.some(el => el.user == auth.user._id) ? (
-          'Thanks for your feedback!'
+        auth.user._id !== review.writtenBy &&
+        (review.markedAsHelpful.some(el => el.user === auth.user._id) ? (
+          <button className='ghost-btn large'>Thanks for your feedback!</button>
         ) : (
-          <button onClick={handleHelpfulOption}>
+          <button className='ghost-btn large' onClick={handleHelpfulOption}>
             {uploading ? 'Sending feedback...' : 'Mark review as helpful'}
           </button>
         ))}
-
       {!auth.loading &&
         auth.isAuthenticated &&
-        auth.user._id != review.writtenBy && (
+        auth.user._id !== review.writtenBy && (
           <ReportForm type={'review'} id={review._id} />
         )}
     </div>

@@ -8,6 +8,7 @@ import {
 } from '../../actions/listing';
 import ListItem from '../Listings/ListItem';
 import { Link } from 'react-router-dom';
+import Spinner from '../Layout/Spinner';
 
 const YourListingsPage = ({
   getActiveListingsByToken,
@@ -34,25 +35,26 @@ const YourListingsPage = ({
   };
 
   useEffect(() => {
-    console.log(auth.user);
     getActiveListingsByToken();
     return () => {
       clearListings();
     };
-  }, [auth.loading, auth.isAuthenticated, auth.user]);
+  }, [clearListings, getActiveListingsByToken]);
 
   return loading || data === null || auth.loading || auth.user === null ? (
-    <div>Loading..</div>
+    <Spinner />
   ) : (
-    <div>
+    <div className='row'>
       <Link to={`/dashboard`}>
         <h4>Back to Dashboard</h4>
-      </Link>{' '}
-      <button onClick={onClick}>
+      </Link>
+      <h2 className='large-heading'>
+        Your {inactive === false ? 'Active' : 'Inactive'} Listings
+      </h2>
+      <p className='small-text'>Found {data.length} results</p>
+      <button className='btn-gray large' onClick={onClick}>
         Show {inactive === false ? 'Inactive' : 'Active'} Listings
       </button>
-      <h1>Your {inactive === false ? 'Active' : 'Inactive'} Listings</h1>
-      <h3>Found {data.length} results</h3>
       {data.map(listing => (
         <ListItem key={listing._id} listing={listing} />
       ))}

@@ -1,61 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { getUserById, clearUser } from '../../actions/user';
-import { getReviewsWrittenForUser, clearReviews } from '../../actions/review';
 import { connect } from 'react-redux';
-import {
-  getActiveListingsByUserId,
-  clearListings
-} from '../../actions/listing';
-import ListItem from '../Listings/ListItem';
-import ReactModal from 'react-modal';
-import ReviewItem from '../Reviews/ReviewItem';
+import { getListings, clearListings } from '../../actions/listing';
+import { clearReviews, getReviewsWrittenForUser } from '../../actions/review';
 import { Link } from 'react-router-dom';
-import ReportForm from '../Forms/ReportForm';
+import ReportForm from '../Report/ReportForm';
 import { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
+import ViewReviewsModal from './ViewReviewsModal';
+import CreateReviewModal from '../Reviews/CreateReviewModal';
+import ListingCard from '../Listing/ListingCard';
+import Spinner from '../Layout/Spinner';
+import Moment from 'react-moment';
 
 const ProfilePage = ({
   match,
   getUserById,
-  getActiveListingsByUserId,
-  getReviewsWrittenForUser,
   user,
   clearUser,
-  clearReviews,
+  getListings,
   clearListings,
+  getReviewsWrittenForUser,
   auth,
-  listings,
-  reviews
+  clearReviews,
+  listings
 }) => {
-  const [formData, setFormData] = useState({
-    showModal: false
-  });
-
-  const { showModal } = formData;
-
-  const handleOpenModal = () => {
-    setFormData({ showModal: true });
-  };
-
-  const handleCloseModal = () => {
-    setFormData({ showModal: false });
-  };
-
   useEffect(() => {
-    getActiveListingsByUserId(match.params.id);
-    getUserById(match.params.id);
     getReviewsWrittenForUser(match.params.id);
+    getListings(`?createdBy=${match.params.id}&limit=5`);
+    getUserById(match.params.id);
     return () => {
       clearUser();
-      clearListings();
       clearReviews();
+      clearListings();
     };
   }, [
-    getActiveListingsByUserId,
+    getListings,
     getUserById,
     clearUser,
     clearListings,
+    match.params.id,
     clearReviews
   ]);
 
@@ -64,11 +49,9 @@ const ProfilePage = ({
     auth.loading ||
     auth.user === null ||
     listings.loading ||
-    listings.data === null ||
-    reviews.data === null ||
-    reviews.loading) &&
+    listings.data === null) &&
     !user.errors ? (
-    <div>Loading..</div>
+    <Spinner />
   ) : user.errors ? (
     <div>No user found</div>
   ) : (
@@ -76,38 +59,56 @@ const ProfilePage = ({
       <Helmet>
         <title>{user.data.name}'s profile | Auction</title>
       </Helmet>
-      <img src={user.data.avatar} alt='User profile picture' />
-      <h2>{user.data.name}</h2>
-      <button onClick={handleOpenModal}>
-        View Reviews ({reviews.data.length})
-      </button>
-      {auth.isAuthenticated && auth.user._id != user.data._id && (
-        <ReportForm type={'user'} id={user.data._id} />
-      )}
-      {auth.isAuthenticated && auth.user._id != user.data._id && (
-        <Link to={`/profile/${user.data._id}/review`}>Write a Review</Link>
-      )}
-      <ReactModal
-        isOpen={showModal}
-        closeTimeoutMS={0}
-        onRequestClose={handleCloseModal}
-        onAfterClose={handleCloseModal}
-        onAfterOpen={handleOpenModal}
-      >
-        <h1>Reviews</h1>
-        {reviews.data.length === 0
-          ? 'This user has no reviews yet'
-          : reviews.data.map(review => (
-              <ReviewItem key={review._id} review={review} />
-            ))}
-      </ReactModal>
-      <div>
-        <h3>Browse {user.data.name.split(' ')[0]}'s recent listings</h3>
-        {listings.data.length === 0
-          ? 'This user has no active listenings at the moment'
-          : listings.data.map(listing => (
-              <ListItem key={listing._id} listing={listing} />
-            ))}
+      <div class='row'>
+        <div className='profile-top'>
+          <img
+            onLoad={console.log('xd')}
+            src={user.data.avatar}
+            className='round-image'
+            alt='User profile picture'
+          />
+          <h2 className='large-heading'>{user.data.name}</h2>
+          <h4 className='medium-heading'>
+            User since <Moment>{user.data.date}</Moment>
+          </h4>
+          {user.data.location && (
+            <h4 className='medium-heading'>Located in {user.data.location}</h4>
+          )}
+          {auth.isAuthenticated && auth.user._id != user.data._id && (
+            <ReportForm type={'user'} id={user.data._id} />
+          )}
+          {auth.isAuthenticated && auth.user._id != user.data._id && (
+            <CreateReviewModal id={user.data._id} />
+          )}
+          <ViewReviewsModal match={match} />
+        </div>
+        <div>
+          <h2 className='large-heading'>
+            {user.data.name.split(' ')[0]}'s bio
+          </h2>
+          <p className='small-text'>
+            {user.data.bio ? user.data.bio : 'This user has no bio'}
+          </p>
+        </div>
+
+        <div className='listing-card-row'>
+          <h2 className='large-heading'>
+            Browse {user.data.name.split(' ')[0]}'s recent listings
+            <span>
+              <Link
+                className='link see-more'
+                to={`/listings?createdBy=${user.data._id}`}
+              >
+                <h4>See more</h4>
+              </Link>
+            </span>
+          </h2>
+          {listings.data.length === 0
+            ? 'This user has no active listenings at the moment'
+            : listings.data.map(listing => (
+                <ListingCard id={listing._id} listing={listing} />
+              ))}
+        </div>
       </div>
     </Fragment>
   );
@@ -124,9 +125,9 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   getUserById,
-  getReviewsWrittenForUser,
-  getActiveListingsByUserId,
-  clearReviews,
   clearUser,
-  clearListings
+  getListings,
+  clearListings,
+  clearReviews,
+  getReviewsWrittenForUser
 })(ProfilePage);

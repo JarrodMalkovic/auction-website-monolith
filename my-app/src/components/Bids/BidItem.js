@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { deleteBid } from '../../actions/listing';
-import io from 'socket.io-client';
+import Moment from 'react-moment';
 
 const BidItem = ({ bid, auth, deleteBid, listingId, socket }) => {
   const onClick = async e => {
@@ -12,13 +12,23 @@ const BidItem = ({ bid, auth, deleteBid, listingId, socket }) => {
   };
 
   return (
-    <div>
-      <p>Amount: {bid.bid}</p>
-      <p>Time: {bid.createdAt}</p>
-      <p>Who: {bid.user}</p>
-      {!auth.loading && auth.user._id == bid.user && (
-        <button onClick={onClick}>DELETE</button>
-      )}
+    <div className='bid-item'>
+      <p className='small-text'>
+        {(bid.bid / 100).toLocaleString('en-US', {
+          style: 'currency',
+          currency: 'AUD'
+        })}{' '}
+        was bid{' '}
+        <Moment fromNow ago local>
+          {bid.createdAt}
+        </Moment>{' '}
+        ago{' '}
+        {!auth.loading && auth.user._id == bid.user && (
+          <button className='white-btn small right' onClick={onClick}>
+            DELETE
+          </button>
+        )}
+      </p>
     </div>
   );
 };

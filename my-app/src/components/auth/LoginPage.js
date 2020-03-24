@@ -30,36 +30,40 @@ const Login = ({ login, isAuthenticated }) => {
       <Helmet>
         <title>Log in | Auction</title>
       </Helmet>
-      <h1 className='large text-primary'>Sign In</h1>
-      <p className='lead'>
-        <i className='fas fa-user' /> Sign Into Your Account
-      </p>
-      <form className='form' onSubmit={e => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            type='email'
-            placeholder='Email Address'
-            name='email'
-            value={email}
-            onChange={e => onChange(e)}
-            required
-          />
-        </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Password'
-            name='password'
-            value={password}
-            onChange={e => onChange(e)}
-            minLength='3'
-          />
-        </div>
-        <input type='submit' className='btn btn-primary' value='Login' />
-      </form>
-      <p className='my-1'>
-        Don't have an account? <Link to='/register'>Sign Up</Link>
-      </p>
+      <div className='row'>
+        <form className='form' onSubmit={e => onSubmit(e)}>
+          <h2 className='large-heading'>Log in</h2>
+          <p className='small-text'>
+            <i className='fas fa-user' /> Login to Your Account
+          </p>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Email</h4>
+            <input
+              type='email'
+              placeholder='Email Address'
+              name='email'
+              value={email}
+              onChange={e => onChange(e)}
+              required
+            />
+          </div>
+          <div className='form-group'>
+            <h4 className='medium-heading'>Password</h4>
+            <input
+              type='password'
+              placeholder='Password'
+              name='password'
+              value={password}
+              onChange={e => onChange(e)}
+              minLength='3'
+            />
+          </div>
+          <input type='submit' className='btn-gray large full' value='Login' />
+        </form>
+        <p className='small-text'>
+          Don't have an account? <Link to='/register'>Register today</Link>
+        </p>
+      </div>
     </Fragment>
   );
 };

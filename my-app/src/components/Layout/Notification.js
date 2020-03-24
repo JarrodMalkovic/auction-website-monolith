@@ -2,27 +2,34 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addNotification } from '../../actions/notification';
-import NotificationSystem from 'react-notification-system';
+import {
+  NotificationContainer,
+  NotificationManager
+} from 'react-notifications';
 
 class Notification extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-    this.notificationSystem = this.refs.notificationSystem;
-  }
-
   componentWillReceiveProps(newProps) {
     const { message, level } = newProps.notification;
-    this.notificationSystem.addNotification({
-      level,
-      message
-    });
+    switch (level) {
+      case 'info':
+        NotificationManager.info(message);
+        break;
+      case 'success':
+        NotificationManager.success(message);
+        break;
+      case 'warning':
+        NotificationManager.warning(message);
+        break;
+      case 'error':
+        NotificationManager.error(message);
+        break;
+      default:
+        break;
+    }
   }
 
   render() {
-    return <NotificationSystem ref='notificationSystem' />;
+    return <NotificationContainer />;
   }
 }
 

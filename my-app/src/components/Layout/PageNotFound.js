@@ -8,7 +8,13 @@ const PageNotFound = props => {
       <Helmet>
         <title>Page not found! | Auction</title>
       </Helmet>
-      <p>Page not found!</p>
+      <div className='row'>
+        <h2 className='large-heading'>404: Page Not Found</h2>
+        <p className='small-text'>
+          Sorry, but the page you are looking for was not found. Please make
+          sure you have typed the current URL correctly.
+        </p>
+      </div>
     </div>
   );
 };

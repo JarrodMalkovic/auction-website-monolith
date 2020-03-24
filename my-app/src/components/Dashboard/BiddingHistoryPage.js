@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getBiddingHistory, getWonListings } from '../../actions/listing';
 import ListItem from '../Listings/ListItem';
 import { Link } from 'react-router-dom';
 import { clearListings } from '../../actions/listing';
+import Spinner from '../Layout/Spinner';
 
 const BiddingHistoryPage = ({
   getBiddingHistory,
@@ -18,7 +19,7 @@ const BiddingHistoryPage = ({
     return () => {
       clearListings();
     };
-  }, [auth.loading, auth.isAuthenticated, auth.user, getBiddingHistory]);
+  }, [getBiddingHistory, clearListings]);
 
   const showWonListings = () => {
     clearListings();
@@ -35,19 +36,31 @@ const BiddingHistoryPage = ({
   };
 
   return loading || data === null || auth.loading || auth.user === null ? (
-    <div>Loading..</div>
+    <Spinner />
   ) : (
-    <div>
+    <div className='row'>
       <Link to={`/dashboard`}>
         <h4>Back to Dashboard</h4>
       </Link>{' '}
-      <button onClick={showWonListings}>Show listings you've won</button>
-      <button onClick={showLostListings}>Show listings you've lost</button>
-      <button onClick={showBidOnListings}>
-        Show active listings you've bid on
-      </button>
-      <h1>Active listings you've bid on</h1>
-      <h3>Found {data.length} results</h3>
+      <h2 className='large-heading'>Active listings you've bid on</h2>
+      <p className='small-text'>Found {data.length} results</p>
+      <div className='button-row'>
+        <button className='btn-gray large btn-spaced' onClick={showWonListings}>
+          Show listings you've won
+        </button>
+        <button
+          className='btn-gray large btn-spaced'
+          onClick={showLostListings}
+        >
+          Show listings you've lost
+        </button>
+        <button
+          className='btn-gray large btn-spaced'
+          onClick={showBidOnListings}
+        >
+          Show active listings you've bid on
+        </button>
+      </div>
       {data.map(listing => (
         <ListItem key={listing._id} listing={listing} />
       ))}

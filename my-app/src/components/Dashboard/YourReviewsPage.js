@@ -9,6 +9,7 @@ import {
 import { clearListings } from '../../actions/listing';
 import { Link } from 'react-router-dom';
 import ReviewItem from '../Reviews/ReviewItem';
+import Spinner from '../Layout/Spinner';
 
 const YourReviewsPage = ({
   clearListings,
@@ -36,18 +37,22 @@ const YourReviewsPage = ({
     return () => {
       clearReviews();
     };
-  }, [auth.loading, auth.isAuthenticated, auth.user]);
+  }, [clearReviews, getReviewsWrittenByUser]);
 
   return auth.loading || auth.user === null || loading || data === null ? (
-    <div>Loading..</div>
+    <Spinner />
   ) : (
-    <div>
+    <div className='row'>
       <Link to={`/dashboard`}>
         <h4>Back to Dashboard</h4>
       </Link>{' '}
-      <button onClick={onClick}>Show reviews you've written</button>
-      <h1>Reviews customers have written about you</h1>
-      <h3>Found {data.length} results</h3>
+      <h2 className='large-heading'>
+        Reviews customers have written about you
+      </h2>
+      <p className='small-text'>Found {data.length} results</p>
+      <button className='btn-gray large' onClick={onClick}>
+        Show reviews you've written
+      </button>
       {data.map(review => (
         <ReviewItem key={review._id} review={review} />
       ))}
