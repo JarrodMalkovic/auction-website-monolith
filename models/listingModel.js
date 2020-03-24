@@ -33,7 +33,8 @@ const ListingSchema = new mongoose.Schema({
   },
   currentPrice: { type: Number },
   startPrice: {
-    type: Number
+    type: Number,
+    default: 0
   },
   minIncrement: {
     type: Number,
@@ -80,12 +81,8 @@ const ListingSchema = new mongoose.Schema({
 
 //sets the current price to the starting price
 ListingSchema.pre('save', function(next) {
-  console.log('%s has been saved', this._id);
-  console.log(this);
   if (!this.currentPrice) {
-    console.log('Running');
     this.currentPrice = this.startPrice;
-    console.log(this.currentPrice);
   }
   next();
 });
