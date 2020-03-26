@@ -2,12 +2,12 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createListing } from '../../actions/listing';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import ImageUploader from 'react-images-upload';
-import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import ReCAPTCHA from 'react-google-recaptcha';
+import DatePicker from 'react-datepicker';
+import axios from 'axios';
+import ImageUploader from 'react-images-upload';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -17,18 +17,8 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
     category: '',
     length: '',
     condition: 'used',
-    startPrice: '',
-    image: ''
+    startPrice: ''
   });
-
-  const [pictures, setPictures] = useState([]);
-
-  const onDrop = picture => {
-    setPictures([...pictures, picture]);
-  };
-  const [endDate, setEndDate] = useState(new Date());
-
-  const [verified, setVerified] = useState(false);
 
   let {
     title,
@@ -36,27 +26,27 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
     minIncrement,
     category,
     condition,
-    startPrice,
-    image
+    startPrice
   } = formData;
 
-  useEffect(() => {
-    setFormData({
-      title: '',
-      description: '',
-      minIncrement: '',
-      category: '',
-      length: '',
-      condition: 'Used',
-      startPrice: ''
-    });
-  }, [isAuthenticated]);
+  const [pictures, setPictures] = useState([]);
+
+  const [endDate, setEndDate] = useState(new Date());
+
+  const [verified, setVerified] = useState(false);
+
+  const [uploading, setUploading] = useState(false);
+
+  const onDrop = picture => {
+    setPictures([...pictures, picture]);
+  };
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
     e.preventDefault();
+    setUploading(true);
     if (verified) {
       let img;
       if (pictures[0]) {
@@ -79,6 +69,7 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
     } else {
       alert('Do the CAPTCHA');
     }
+    setUploading(false);
   };
 
   const verifyCallback = e => {
@@ -99,7 +90,7 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
           <h2 className='large-heading'>Create Listing</h2>
           <p className='small-text'>Put an item up for auction</p>
           <div className='form-group'>
-            <h4 className='medium-heading'>Item name</h4>
+            <h4 className='medium-heading'>Item name*</h4>
             <input
               type='text'
               placeholder='Required'
@@ -110,12 +101,13 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
             />
           </div>
           <div className='form-group'>
-            <h4 className='medium-heading'>Item description</h4>
+            <h4 className='medium-heading'>Item description*</h4>
             <textarea
               placeholder='Description'
               name='description'
               value={description}
               onChange={e => onChange(e)}
+              required
             />
           </div>
           <div className='form-group'>
@@ -188,12 +180,13 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
             </select>
           </div>
           <div className='form-group'>
-            <h4 className='medium-heading'>Auction end date</h4>
+            <h4 className='medium-heading'>Auction end date*</h4>
             <DatePicker
               selected={endDate}
               onChange={date => setEndDate(date)}
               minDate={new Date()}
               dateFormat='MMMM d, yyyy'
+              required
             />
           </div>
           <div className='form-group'>
@@ -208,7 +201,8 @@ const CreateListingPage = ({ createListing, history, isAuthenticated }) => {
           <input
             type='submit'
             className='btn-gray large full'
-            value='Create Listing'
+            value={uploading ? 'Creating..' : 'Create listing'}
+            disabled={uploading}
           />
         </form>
       </div>
