@@ -4,6 +4,7 @@ const config = require('config');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const User = require('../models/userModel');
+const dotenv = require('dotenv').config({ path: './config.env' });
 
 exports.loginUser = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -32,7 +33,7 @@ exports.loginUser = catchAsync(async (req, res, next) => {
 
   jwt.sign(
     payload,
-    config.get('jwtSecret'),
+    process.env.jwtSecret,
     { expiresIn: 360000 },
     (err, token) => {
       if (err) throw err;
