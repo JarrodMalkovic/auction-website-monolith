@@ -24,6 +24,10 @@
   border: none;
   border-radius: 5rem;
 }
+.btn-gray:disabled,
+.btn-gray[disabled] {
+  background-color: $light-gray;
+}
 
 .btn-spaced {
   margin-right: 1.4rem;
