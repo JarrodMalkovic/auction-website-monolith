@@ -1,3 +1,2 @@
 node_modules/
-config/default.json
-config.env
+env
