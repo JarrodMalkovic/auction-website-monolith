@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
-import ReportForm from '../Report/ReportForm';
+import CreateReportModal from '../Report/CreateReportModal';
 import Countdown from '../Layout/Countdown';
 import ViewBidsModal from '../Bids/ViewBidsModal';
 import ListingCard from './ListingCard';
@@ -145,20 +145,20 @@ const Listing = ({
                   value={bid}
                   step='0.01'
                   onChange={e => onChange(e)}
-                  disabled={data.active ? false : true}
+                  disabled={!data.active}
                   required
                 />
                 <input
                   type='submit'
                   className='btn btn-primary'
                   value={uploading ? 'Placing..' : 'Place bid'}
-                  disabled={data.active ? false : true}
+                  disabled={!data.active}
                 />
               </div>
             </form>
 
             {auth.isAuthenticated && auth.user._id !== data.createdBy._id && (
-              <ReportForm type={'Listing'} id={data._id} />
+              <CreateReportModal type={'Listing'} id={data._id} />
             )}
             {!auth.loading && auth.user._id === data.createdBy._id && (
               <Link to={`/listings/${data.slug}/edit`}>

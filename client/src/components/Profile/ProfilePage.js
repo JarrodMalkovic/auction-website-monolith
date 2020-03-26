@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 import { getListings, clearListings } from '../../actions/listing';
 import { clearReviews, getReviewsWrittenForUser } from '../../actions/review';
 import { Link } from 'react-router-dom';
-import ReportForm from '../Report/ReportForm';
 import { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
+import Moment from 'react-moment';
+import CreateReportModal from '../Report/CreateReportModal';
 import ViewReviewsModal from './ViewReviewsModal';
 import CreateReviewModal from '../Reviews/CreateReviewModal';
 import ListingCard from '../Listing/ListingCard';
 import Spinner from '../Layout/Spinner';
-import Moment from 'react-moment';
 
 const ProfilePage = ({
   match,
@@ -75,7 +75,7 @@ const ProfilePage = ({
             <h4 className='medium-heading'>Located in {user.data.location}</h4>
           )}
           {auth.isAuthenticated && auth.user._id != user.data._id && (
-            <ReportForm type={'user'} id={user.data._id} />
+            <CreateReportModal type={'user'} id={user.data._id} />
           )}
           {auth.isAuthenticated && auth.user._id != user.data._id && (
             <CreateReviewModal id={user.data._id} />

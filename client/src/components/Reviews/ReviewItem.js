@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import EditReviewModal from './EditReviewModal';
 import { deleteReview, markReviewAsHelpful } from '../../actions/review';
-import ReportForm from '../Report/ReportForm';
+import CreateReportModal from '../Report/CreateReportModal';
 import StarRatingComponent from 'react-star-rating-component';
 
 const ReviewItem = ({ review, auth, deleteReview, markReviewAsHelpful }) => {
@@ -52,7 +52,7 @@ const ReviewItem = ({ review, auth, deleteReview, markReviewAsHelpful }) => {
       {!auth.loading &&
         auth.isAuthenticated &&
         auth.user._id !== review.writtenBy && (
-          <ReportForm type={'review'} id={review._id} />
+          <CreateReportModal type={'review'} id={review._id} />
         )}
     </div>
   );
