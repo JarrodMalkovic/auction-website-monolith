@@ -1,13 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import SearchBar from '../Forms/SearchBar';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
 
 const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const toggleMobileDisplay = () => {
-    console.log('toggled');
     const navbar = document.querySelector('.navbar');
     if (navbar.className === 'navbar') {
       navbar.className += ' responsive';
@@ -22,13 +21,19 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         <a className='Nav_link icon' onClick={toggleMobileDisplay}>
           &#9776;
         </a>
-        <NavLink to='/home' activeClassName='selected' className='Nav_link'>
+        <NavLink
+          to='/'
+          activeClassName='selected'
+          className='Nav_link'
+          exact={true}
+        >
           <i className='fas fa-home' /> <span>Home</span>
         </NavLink>
         <NavLink
           to='/dashboard'
           activeClassName='selected'
           className='Nav_link'
+          exact={true}
         >
           <i className='fas fa-id-card' /> <span>Dashboard</span>
         </NavLink>
@@ -37,20 +42,18 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         <SearchBar />
       </li>
       <li>
-        <NavLink to='/create' activeClassName='selected' className='Nav_link'>
-          <i className='fas fa-plus-circle' />{' '}
-          <span className='hide-sm'>Create listing</span>
-        </NavLink>
         <NavLink
-          to='/logout'
+          to='/create'
           activeClassName='selected'
           className='Nav_link'
           exact={true}
         >
-          <a onClick={logout}>
-            <i className='fas fa-sign-out-alt' />{' '}
-            <span className='hide-sm'>Logout</span>
-          </a>
+          <i className='fas fa-plus-circle' />{' '}
+          <span className='hide-sm'>Create listing</span>
+        </NavLink>
+        <NavLink to='/' className='Nav_link' onClick={logout} exact={true}>
+          <i className='fas fa-sign-out-alt' />{' '}
+          <span className='hide-sm'>Logout</span>
         </NavLink>
       </li>
     </ul>
@@ -59,7 +62,12 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const guestLinks = (
     <ul>
       <li>
-        <NavLink to='/home' activeClassName='selected' className='Nav_link'>
+        <NavLink
+          to='/'
+          activeClassName='selected'
+          className='Nav_link'
+          exact={true}
+        >
           <i className='fas fa-home' /> <span className='hide-sm'>Home</span>
         </NavLink>
       </li>
@@ -71,6 +79,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
           to='/login'
           activeClassName='selected'
           className='Nav_link  rightLink'
+          exact={true}
         >
           <i className='fas fa-sign-in-alt' />{' '}
           <span className='hide-sm'>Login</span>
@@ -79,6 +88,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
           to='/register'
           activeClassName='selected'
           className='Nav_link  rightLink'
+          exact={true}
         >
           <i class='fas fa-user-plus'></i>{' '}
           <span className='hide-sm'>Register</span>
