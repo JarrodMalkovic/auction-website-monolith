@@ -23,7 +23,9 @@ beforeAll(async () => {
     .send({
       title: 'Test listing title',
       description: 'Listing to be reported',
-      endDate: Date.now() + 100000
+      endDate: Date.now() + 100000,
+      startPrice: 100,
+      minIncrement: 1
     });
   listingId = listing.body.listing._id;
 });

@@ -38,6 +38,8 @@ describe('Create Listing Endpoint Tests', () => {
       .set('x-auth-token', token)
       .send({
         title: 'Test listing title',
+        startPrice: 100,
+        minIncrement: 1,
         description: 'Test listing description',
         endDate: Date.now() + 100000
       });
@@ -49,6 +51,8 @@ describe('Create Listing Endpoint Tests', () => {
     const res = await request.post('/api/listings').send({
       title: 'Test listing title',
       description: 'Test listing description',
+      startPrice: 100,
+      minIncrement: 1,
       endDate: Date.now() + 100000
     });
     expect(res.statusCode).toEqual(401);
@@ -72,6 +76,8 @@ describe('Update Listing Endpoint Tests', () => {
       .post('/api/listings')
       .set('x-auth-token', token)
       .send({
+        startPrice: 100,
+        minIncrement: 1,
         title: 'Test listing title',
         description: 'Test listing description',
         endDate: Date.now() + 100000
@@ -93,6 +99,8 @@ describe('Update Listing Endpoint Tests', () => {
       .set('x-auth-token', token)
       .send({
         title: 'Test listing title',
+        startPrice: 100,
+        minIncrement: 1,
         description: 'Test listing description',
         endDate: Date.now() + 100000
       });
@@ -112,6 +120,8 @@ describe('Update Listing Endpoint Tests', () => {
       .send({
         title: 'Test listing title',
         description: 'Test listing description',
+        startPrice: 100,
+        minIncrement: 1,
         endDate: Date.now() + 100000
       });
     const res = await request
@@ -132,6 +142,8 @@ describe('Delete Listing Endpoint Tests', () => {
       .send({
         title: 'Test listing title',
         description: 'Test listing description',
+        startPrice: 100,
+        minIncrement: 1,
         endDate: Date.now() + 100000
       });
     const res = await request
@@ -150,6 +162,8 @@ describe('Delete Listing Endpoint Tests', () => {
       .send({
         title: 'Test listing title',
         description: 'Test listing description',
+        startPrice: 100,
+        minIncrement: 1,
         endDate: Date.now() + 100000
       });
     const res = await request
@@ -168,6 +182,8 @@ describe('Delete Listing Endpoint Tests', () => {
       .send({
         title: 'Test listing title',
         description: 'Test listing description',
+        startPrice: 100,
+        minIncrement: 1,
         endDate: Date.now() + 100000
       });
     const res = await request
@@ -188,13 +204,15 @@ describe('Create Bid Endpoint Tests', () => {
       .send({
         title: 'Test listing title',
         description: 'Test listing description',
+        startPrice: 100,
+        minIncrement: 1,
         endDate: Date.now() + 100000
       });
     const res = await request
       .post(`/api/listings/${listing.body.listing._id}/bid`)
       .set('x-auth-token', token)
       .send({
-        bid: 100
+        bid: 200
       });
     listingId = listing.body.listing._id;
     expect(res.statusCode).toEqual(200);
@@ -207,13 +225,15 @@ describe('Create Bid Endpoint Tests', () => {
       .send({
         title: 'Test listing title',
         description: 'Test listing description',
-        endDate: Date.now() + 100000
+        endDate: Date.now() + 100000,
+        startPrice: 100,
+        minIncrement: 1
       });
     const res = await request
       .post(`/api/listings/${listing.body.listing._id}/bid`)
       .set('x-auth-token', 'dasddasdsaddsadsadasdada')
       .send({
-        bid: 100
+        bid: 200
       });
     listingId = listing.body.listing._id;
     expect(res.statusCode).toEqual(401);
@@ -226,12 +246,14 @@ describe('Create Bid Endpoint Tests', () => {
       .send({
         title: 'Test listing title',
         description: 'Test listing description',
-        endDate: Date.now() + 100000
+        endDate: Date.now() + 100000,
+        startPrice: 100,
+        minIncrement: 1
       });
     const res = await request
       .post(`/api/listings/${listing.body.listing._id}/bid`)
       .send({
-        bid: 100
+        bid: 200
       });
     listingId = listing.body.listing._id;
     expect(res.statusCode).toEqual(401);
@@ -244,19 +266,21 @@ describe('Create Bid Endpoint Tests', () => {
       .send({
         title: 'Test listing title',
         description: 'Test listing description',
-        endDate: Date.now() + 100000
+        endDate: Date.now() + 100000,
+        startPrice: 100,
+        minIncrement: 1
       });
     await request
       .post(`/api/listings/${listing.body.listing._id}/bid`)
       .set('x-auth-token', token)
       .send({
-        bid: 100
+        bid: 200
       });
     const res = await request
       .post(`/api/listings/${listing.body.listing._id}/bid`)
       .set('x-auth-token', token)
       .send({
-        bid: 50
+        bid: 100
       });
     listingId = listing.body.listing._id;
     expect(res.statusCode).toEqual(400);
@@ -280,13 +304,14 @@ describe('Create Bid Endpoint Tests', () => {
         title: 'Test listing title',
         description: 'Test listing description',
         endDate: Date.now() + 100000,
-        minIncrement: 50
+        startPrice: 100,
+        minIncrement: 1
       });
     await request
       .post(`/api/listings/${listing.body.listing._id}/bid`)
       .set('x-auth-token', token)
       .send({
-        bid: 100
+        bid: 150
       });
     const res = await request
       .post(`/api/listings/${listing.body.listing._id}/bid`)
@@ -306,6 +331,8 @@ describe('Create Bid Endpoint Tests', () => {
         title: 'Test listing title',
         description: 'Test listing description',
         endDate: Date.now(),
+        startPrice: 100,
+        minIncrement: 1,
         active: false
       });
     const res = await request
