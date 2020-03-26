@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { getReviewsWrittenForUser, clearReviews } from '../../actions/review';
 import PropTypes from 'prop-types';
-import ReactModal from 'react-modal';
 import { connect } from 'react-redux';
 import { Fragment } from 'react';
+import ReactModal from 'react-modal';
 import ReviewItem from '../Reviews/ReviewItem';
 
 const ViewReviewsModal = ({ reviews }) => {

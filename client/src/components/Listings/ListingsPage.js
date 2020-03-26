@@ -1,11 +1,11 @@
 import React, { Fragment, useEffect } from 'react';
 import { getListings, clearListings } from '../../actions/listing';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import ListItem from './ListItem';
 import PaginationButtons from '../Layout/PaginationButtons';
 import AdvancedSearchForm from '../Forms/AdvancedSearchForm';
 import Spinner from '../Layout/Spinner';
-import { Helmet } from 'react-helmet';
 const queryString = require('query-string');
 
 export const Listings = ({
