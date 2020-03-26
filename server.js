@@ -17,9 +17,9 @@ connectDB();
 
 // Cloudinary Setup for image upload
 cloudinary.config({
-  cloud_name: config.get('CLOUD_NAME'),
-  api_key: config.get('API_KEY'),
-  api_secret: config.get('API_SECRET')
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
 });
 
 // Socket.IO for real time bidding

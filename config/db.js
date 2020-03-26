@@ -11,7 +11,7 @@ const connectDB = async () => {
       var dbName = 'Production';
     }
 
-    await mongoose.connect(db, {
+    await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
