@@ -3,7 +3,6 @@ const router = express.Router();
 
 const listingController = require('../../controllers/listingController');
 const authController = require('../../controllers/authController');
-const cloudinary = require('cloudinary');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
@@ -11,6 +10,7 @@ const storage = multer.diskStorage({
     callback(null, Date.now() + file.originalname);
   }
 });
+
 const upload = multer({ storage: storage });
 
 // @route    POST api/listings
@@ -112,26 +112,13 @@ router.get('/:user_id/active', listingController.getActiveListingsByUser);
 // @access   Public
 router.get('/:user_id/inactive', listingController.getInactiveListingsByUser);
 
-// router.post(
-//   '/upload/image',
-//   upload.single('image'),
-//   listingController.uploadImage
-// );
-
-router.post('/upload/image', upload.single('image'), (req, res) => {
-  console.log('l' + req.file.path);
-  cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
-    console.log('xdd');
-    if (err) {
-      console.log('err', err);
-      req.json(err.message);
-    }
-    console.log('xd');
-    var pic = { url: result.secure_url, imageId: result.public_id };
-
-    console.log(pic);
-    return res.status(200).json(pic);
-  });
-});
+// @route    GET api/listings/upload/image
+// @desc     Upload image to Cloudinary cloud
+// @access   Private
+router.post(
+  '/upload/image',
+  upload.single('image'),
+  listingController.uploadImage
+);
 
 module.exports = router;
