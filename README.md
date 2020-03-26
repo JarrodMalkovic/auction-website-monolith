@@ -1,4 +1,4 @@
-# Auction Site
+# Auction Website
 
 ## Usage
 
