@@ -1,7 +1,6 @@
 const Listing = require('../models/listingModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const multer = require('multer');
 const cloudinary = require('cloudinary');
 
 exports.createListing = catchAsync(async (req, res, next) => {
@@ -12,9 +11,17 @@ exports.createListing = catchAsync(async (req, res, next) => {
     startPrice: req.body.startPrice * 100,
     minIncrement: req.body.minIncrement * 100
   };
-  if (listingBody.startPrice % 1 !== 0 && listingBody.minIncrement % 1 !== 0) {
+  if (
+    listingBody.minIncrement % 1 !== 0 &&
+    !!listingBody.minIncrement &&
+    listingBody.startPrice % 1 !== 0 &&
+    !!listingBody.startPrice
+  ) {
     return next(
-      new AppError('Money fields must only have two decimal places', 400)
+      new AppError(
+        'Money fields are required and must only have two decimal places',
+        400
+      )
     );
   }
   if (!(listingBody.endDate && listingBody.title && listingBody.description)) {
@@ -177,6 +184,20 @@ exports.updateListing = catchAsync(async (req, res, next) => {
 });
 
 exports.makeBid = catchAsync(async (req, res, next) => {
+  const bid = {
+    user: req.user.id,
+    bid: req.body.bid * 100
+  };
+
+  if (bid.bid % 1 !== 0 && !!bid.bid) {
+    return next(
+      new AppError(
+        'Money fields are required and must only have two decimal places',
+        400
+      )
+    );
+  }
+
   const listing = await Listing.findById(req.params.id).populate('createdBy');
 
   if (!listing) {
@@ -186,16 +207,11 @@ exports.makeBid = catchAsync(async (req, res, next) => {
   if (!listing.active) {
     return next(new AppError('Cannot bid on expired listings', 400));
   }
-  const maxBid = Math.max(...listing.bids.map(o => o.bid), 0);
+  let maxBid = Math.max(...listing.bids.map(o => o.bid), 0);
 
   if (!maxBid) {
     maxBid = listing.startPrice;
   }
-
-  const bid = {
-    user: req.user.id,
-    bid: req.body.bid * 100
-  };
 
   if (req.body.bid * 100 > listing.minIncrement + maxBid) {
     listing.bids.push(bid);
@@ -308,48 +324,12 @@ exports.getUsersWonListings = catchAsync(async (req, res, next) => {
 });
 
 exports.uploadImage = catchAsync(async (req, res, next) => {
-  console.log(req.body);
-  const storage = multer.diskStorage({
-    filename: function(req, file, callback) {
-      callback(null, Date.now() + file.originalname);
-    }
-  });
-  const upload = multer({ storage: storage });
-
-  upload.single('image');
-
-  console.log('image', req.file);
   cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
     if (err) {
+      console.log('err', err);
       req.json(err.message);
     }
-    var image = { url: result.secure_url, imageId: result.public_id };
-
-    console.log(req.body);
-    req.image = image;
-    next();
+    const pic = { url: result.secure_url, imageId: result.public_id };
+    return res.status(200).json(pic);
   });
 });
-
-// try {
-//   const storage = multer.diskStorage({
-//     filename: function(req, file, callback) {
-//       callback(null, Date.now() + file.originalname);
-//     }
-//   });
-
-//   const upload = multer({ storage: storage });
-//   console.log(req.body.image);
-
-//   cloudinary.v2.uploader.upload(req.body.image.path, function(err, result) {
-//     if (err) {
-//       res.json(err.message);
-//     }
-//     req.body.image = result.secure_url;
-
-//     req.body.imageId = result.public_id;
-//   });
-// } catch (err) {
-//   res.json(err.message);
-// }
-// next();
