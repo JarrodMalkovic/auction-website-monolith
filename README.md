@@ -1,17 +1,20 @@
 # Auction Website
 
-## Usage
+A full stack auction website created using the MERN Stack
 
-### Add a config.env file to the root directory with the following
+## Table of contents
 
-```bash
-PORT=5000
-MONGO_URI=<your_mongoDB_Atlas_uri_with_credentials>
-JWT_SECRET=<your_secret_jwt_token>
-CLOUD_NAME=<your_cloudinary_cloud_name>
-API_KEY=<your_cloudinary_api_key>
-API_SECRET=<your_cloudinary_api_secret>
-```
+- [Quick Start](#quick-start)
+- [Technologies](#technologies)
+- [Documentation](#documentation)
+- [Tests](#tests)
+- [Features](#features)
+
+## Quick Start
+
+### Clone
+
+- Clone this repo to your local machine using `https://github.com/jarrodmalkovic/auction-website.git`
 
 ### Install server dependencies
 
@@ -32,12 +35,26 @@ npm install
 npm run dev
 ```
 
-## Testing
+### Setting up Proccess Environment Variables
+
+Make a new file with the name .env in the root folder. It should contain values for these 3 variables: `PORT`,`MONGO_URI`,`JWT_SECRET`
+
+## Technologies
+
+Project is created with:
+
+- JavaScript, React, Redux, MongoDB, Node.js, Express, HTML, CSS, Sass, Jest, Socket.IO, HTML, CSS
+
+## Documentation
+
+LINK
+
+## Tests
+
+To run the automated testing suite
 
 ```bash
 npm run test
 ```
 
 ## Features
-
-Full API Documentation:
