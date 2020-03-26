@@ -34,10 +34,12 @@ const ListingSchema = new mongoose.Schema({
   currentPrice: { type: Number },
   startPrice: {
     type: Number,
+    required: true,
     default: 0
   },
   minIncrement: {
     type: Number,
+    required: true,
     default: 0
   },
   createdBy: {
