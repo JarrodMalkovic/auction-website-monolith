@@ -32,7 +32,7 @@ npm install
 ### Setting up Proccess Environment Variables
 
 - Make a new file with the name .env in the root folder. It should contain values for these 3 variables: `PORT`,`MONGO_URI`,`JWT_SECRET`.
-- If you want to enable image uploading create a Cloudinary account and fill enter your Cloundinary API key, Cloud Name and API Secret into the variables `API_KEY`,`CLOUD_NAME`,`API_SECRET`. (Optional)
+- If you want to enable image uploading create a Cloudinary account and enter your Cloundinary API key, Cloud Name and API Secret into the variables `API_KEY`,`CLOUD_NAME`,`API_SECRET`. (Optional)
 
 ### Run both Express & React from root
 
