@@ -1,6 +1,5 @@
 const express = require('express');
 const connectDB = require('./config/db');
-const config = require('config');
 const cloudinary = require('cloudinary');
 const app = express();
 var server = require('http').Server(app);
