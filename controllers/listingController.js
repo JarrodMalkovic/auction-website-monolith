@@ -4,7 +4,6 @@ const AppError = require('./../utils/appError');
 const cloudinary = require('cloudinary');
 
 exports.createListing = catchAsync(async (req, res, next) => {
-  console.log('got xd');
   const listingBody = {
     ...req.body,
     createdBy: req.user.id,
