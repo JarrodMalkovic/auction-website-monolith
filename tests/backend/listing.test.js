@@ -82,6 +82,7 @@ describe('Update Listing Endpoint Tests', () => {
         description: 'Test listing description',
         endDate: Date.now() + 100000
       });
+
     const res = await request
       .patch(`/api/listings/${listing.body.listing._id}`)
       .set('x-auth-token', token)

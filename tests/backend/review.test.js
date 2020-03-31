@@ -33,8 +33,8 @@ afterAll(async () => {
   await User.findByIdAndDelete(reviewerId);
 });
 
-describe('Create Report Endpoint Tests', () => {
-  it('Scenario: Create valid report, expect: returns positive status', async () => {
+describe('Create Review Endpoint Tests', () => {
+  it('Scenario: Create valid review, expect: returns positive status', async () => {
     const res = await request
       .post(`/api/review/${userId}`)
       .set('x-auth-token', token)
@@ -46,24 +46,24 @@ describe('Create Report Endpoint Tests', () => {
     expect(res.statusCode).toEqual(200);
   });
 
-  it('Scenario: Create invalid report (Missing required fields), expect: returns negative status', async () => {
+  it('Scenario: Create invalid review (Missing required fields), expect: returns negative status', async () => {
     const res = await request
       .post(`/api/review/${userId}`)
       .set('x-auth-token', token)
       .send({});
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
   });
 
-  it('Scenario: Create invalid report (No auth token), expect: returns negative status', async () => {
+  it('Scenario: Create invalid review (No auth token), expect: returns negative status', async () => {
     const res = await request.post(`/api/review/${userId}`).send({
       title: 'Test review',
       rating: 5,
       text: 'Test review description'
     });
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(401);
   });
 
-  it("Scenario: Create invalid report (User doesn't exist), expect: returns negative exist", async () => {
+  it("Scenario: Create invalid review (User doesn't exist), expect: returns negative exist", async () => {
     const res = await request
       .post(`/api/review/fakeuser`)
       .set('x-auth-token', token)
@@ -72,6 +72,6 @@ describe('Create Report Endpoint Tests', () => {
         rating: 5,
         text: 'Test review description'
       });
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
   });
 });

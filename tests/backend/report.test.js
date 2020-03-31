@@ -53,7 +53,7 @@ describe('Create Report Endpoint Tests', () => {
     expect(res.statusCode).toEqual(200);
   });
 
-  it('Scenario: Create invalid report (Missing required fields), expect: returns positive status', async () => {
+  it('Scenario: Create invalid report (Missing required fields), expect: returns negative status', async () => {
     const res = await request
       .post(`/api/report/${listingId}`)
       .set('x-auth-token', token)
@@ -61,11 +61,11 @@ describe('Create Report Endpoint Tests', () => {
     expect(res.statusCode).toEqual(400);
   });
 
-  it('Scenario: Create invalid report (listing user reported does not exist), expect: returns positive status', async () => {
+  it('Scenario: Create invalid report (listing user reported does not exist), expect: returns negative status', async () => {
     const res = await request
       .post(`/api/report/fakelisting`)
       .set('x-auth-token', token)
       .send({ reportedRef: 'Listing', reason: 'Test report' });
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
   });
 });
