@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const config = require('config');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const User = require('../models/userModel');
@@ -51,7 +50,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
   }
 
   // Verify token
-  await jwt.verify(token, config.get('jwtSecret'), (error, decoded) => {
+  await jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
     if (error) {
       return next(new AppError('Token is not valid', 401));
     } else {
