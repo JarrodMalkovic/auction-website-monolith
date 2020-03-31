@@ -1,7 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://dbUser:dbUser@cluster0-3tgj2.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "mysecrettoken",
-  "CLOUD_NAME": "dtson05nu",
-  "API_KEY": "484116412514584",
-  "API_SECRET": "Ws9u6nMXG2nGZDXCyGCIQFxL_Ck"
-}
