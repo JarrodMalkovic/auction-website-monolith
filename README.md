@@ -44,7 +44,7 @@ npm run dev
 
 Project is created with:
 
-- JavaScript, React, Redux, MongoDB, Node.js, Express, HTML, CSS, Sass, Jest, Socket.IO, HTML, CSS
+- JavaScript, React, Redux, MongoDB, Node.js, Express, HTML, Sass, Jest, Socket.IO
 
 ## Tests
 
