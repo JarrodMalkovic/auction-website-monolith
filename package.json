@@ -66,7 +66,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.0",
     "url": "^0.11.0",
     "uuid": "^3.4.0",
     "xss-clean": "^0.1.1"
