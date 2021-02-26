@@ -19,7 +19,7 @@
   "author": "Jarrod Malkovic",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "babel-core": "^7.0.0-bridge.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.19.0",
