@@ -36,7 +36,7 @@
     "mongoose": "^5.8.7",
     "mongoose-slug-updater": "^3.1.4",
     "multer": "^1.4.2",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "preset-react": "^1.0.0",
     "query-string": "^6.10.1",
     "react-datepicker": "^2.14.0",
